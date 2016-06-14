@@ -1,0 +1,15 @@
+.form-actions {
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 19px 20px 20px;
+}
+.form-actions:before, .form-actions:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.form-actions:after {
+    clear: both;
+}

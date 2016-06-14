@@ -1,0 +1,192 @@
+[31-May-2013 18:00:01] PHP Fatal error:  Call to a member function helper() on a non-object in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_alerts.php on line 18
+[31-May-2013 15:32:28] PHP Fatal error:  Call to a member function post() on a non-object in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_posts.php on line 27
+[31-May-2013 15:32:37] PHP Fatal error:  Call to a member function post() on a non-object in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_posts.php on line 27
+[31-May-2013 15:37:21] PHP Fatal error:  Call to a member function referrer() on a non-object in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_posts.php on line 47
+[31-May-2013 15:47:06] PHP Fatal error:  Can't use method return value in write context in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_posts.php on line 31
+[31-May-2013 15:47:28] PHP Fatal error:  Can't use method return value in write context in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_posts.php on line 31
+[31-May-2013 15:58:10] PHP Fatal error:  Can't use method return value in write context in /home/c04305/public_html/subdomains/framework.PERINOLA/www/application/libraries/FW_posts.php on line 65
+[09-Aug-2014 00:16:22 America/Chicago] PHP Fatal error:  Call to undefined function display_img() in /home2/grupoi5/public_html/app/application/views/cms/panel_inicio.php on line 8
+[09-Aug-2014 00:16:29 America/Chicago] PHP Fatal error:  Call to undefined function display_img() in /home2/grupoi5/public_html/app/application/views/cms/panel_inicio.php on line 8
+[09-Aug-2014 00:17:55 America/Chicago] PHP Fatal error:  Call to undefined function display_img() in /home2/grupoi5/public_html/app/application/views/cms/panel_inicio.php on line 8
+[12-Aug-2014 15:39:09 America/Chicago] PHP Fatal error:  Call to undefined method CI_DB_mysql_driver::num_rows() in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_reclamos.php on line 51
+[12-Aug-2014 16:36:31 America/Chicago] PHP Parse error:  syntax error, unexpected ')' in /home2/grupoi5/public_html/app/application/libraries/PL_Controller.php on line 48
+[12-Aug-2014 18:31:07 America/Chicago] PHP Fatal error:  Cannot redeclare class FPDF in /home2/grupoi5/public_html/app/application/libraries/fpdf/fpdf.php on line 13
+[12-Aug-2014 18:54:16 America/Chicago] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 169
+[12-Aug-2014 19:10:26 America/Chicago] PHP Fatal error:  Call to a member function Image() on a non-object in /home2/grupoi5/public_html/app/system/libraries/fpdf.php on line 7
+[12-Aug-2014 19:40:56 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_reclamos::SetFont() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 169
+[12-Aug-2014 22:44:20 America/Chicago] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 217
+[12-Aug-2014 23:13:11 America/Chicago] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 222
+[12-Aug-2014 23:16:26 America/Chicago] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 222
+[12-Aug-2014 23:24:29 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_reclamos::Image() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 221
+[13-Aug-2014 00:04:26 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_reclamos::Image() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 227
+[13-Aug-2014 00:04:58 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_reclamos::Image() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 227
+[19-Aug-2014 22:54:41 America/Chicago] PHP Fatal error:  Can't use method return value in write context in /home2/grupoi5/public_html/app/application/views/cms/plugin_proceso_reclamo.php on line 28
+[10-Sep-2014 14:13:54 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_posts.php on line 128
+[10-Sep-2014 14:24:41 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_posts.php on line 128
+[10-Sep-2014 14:25:17 America/Chicago] PHP Fatal error:  Call to a member function post() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_posts.php on line 136
+[10-Sep-2014 15:02:54 America/Chicago] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 154
+[10-Sep-2014 15:48:16 America/Chicago] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 263
+[11-Sep-2014 14:35:53 America/Chicago] PHP Parse error:  syntax error, unexpected ')', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home2/grupoi5/public_html/app/application/libraries/PL_Controller.php on line 127
+[12-Sep-2014 18:33:16 America/Chicago] PHP Fatal error:  Call to a member function run() on a non-object in /home2/grupoi5/public_html/app/application/controllers/vobo.php on line 29
+[13-Sep-2014 16:09:17 America/Chicago] PHP Parse error:  syntax error, unexpected 'Helvetica' (T_STRING) in /home2/grupoi5/public_html/app/application/libraries/FW_posts.php on line 320
+[13-Oct-2014 19:10:05 America/Chicago] PHP Fatal error:  Call to a member function total_rows() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_certificado_cambio.php on line 37
+[13-Oct-2014 19:11:00 America/Chicago] PHP Fatal error:  Call to a member function total_stage_reclaims() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_certificado_cambio.php on line 58
+[13-Oct-2014 19:40:21 America/Chicago] PHP Fatal error:  require_once(): Failed opening required 'application/user_files/WebClientPrint.php' (include_path='.:/opt/php54/lib/php') in /home2/grupoi5/public_html/app/system/libraries/clientprint.php on line 5
+[13-Oct-2014 19:58:05 America/Chicago] PHP Fatal error:  Cannot use Neodynamic\SDK\Web\WebClientPrint as WebClientPrint because the name is already in use in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 18
+[13-Oct-2014 19:58:30 America/Chicago] PHP Fatal error:  Cannot use Neodynamic\SDK\Web\WebClientPrint as WebClientPrint because the name is already in use in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 17
+[13-Oct-2014 19:58:59 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 135
+[13-Oct-2014 19:59:19 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 133
+[13-Oct-2014 19:59:58 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 131
+[13-Oct-2014 20:00:55 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 131
+[13-Oct-2014 20:01:40 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 81
+[17-Oct-2014 15:50:30 America/Chicago] PHP Fatal error:  Class 'Neodynamic\SDK\Web\WebClientPrint' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 129
+[17-Oct-2014 15:52:13 America/Chicago] PHP Fatal error:  Class 'Neodynamic\SDK\Web\WebClientPrint' not found in /home2/grupoi5/public_html/app/user_files/WebClientPrint.php on line 8
+[17-Oct-2014 15:52:39 America/Chicago] PHP Fatal error:  Access to undeclared static property: Neodynamic\SDK\Web\WebClientPrint::$licenseOwner in /home2/grupoi5/public_html/app/user_files/WebClientPrint.php on line 8
+[17-Oct-2014 15:54:02 America/Chicago] PHP Fatal error:  Call to undefined method Neodynamic\SDK\Web\WebClientPrint::cacheClean() in /home2/grupoi5/public_html/app/user_files/WebClientPrint.php on line 22
+[17-Oct-2014 15:54:18 America/Chicago] PHP Fatal error:  Call to undefined method Neodynamic\SDK\Web\WebClientPrint::createScript() in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 129
+[24-Oct-2014 18:55:10 America/Chicago] PHP Fatal error:  Call to a member function staff_list() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_process_gift_cards.php on line 83
+[31-Oct-2014 20:58:13 America/Chicago] PHP Fatal error:  Can't use method return value in write context in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_process_gift_cards.php on line 122
+[31-Oct-2014 20:58:32 America/Chicago] PHP Fatal error:  Can't use method return value in write context in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_process_gift_cards.php on line 122
+[31-Oct-2014 20:58:39 America/Chicago] PHP Fatal error:  Can't use method return value in write context in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_process_gift_cards.php on line 122
+[31-Oct-2014 20:58:51 America/Chicago] PHP Fatal error:  Can't use method return value in write context in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_process_gift_cards.php on line 122
+[04-Nov-2014 16:20:39 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:28:50 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 57
+[04-Nov-2014 16:29:46 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:30:16 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:30:48 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:31:14 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:31:28 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:34:34 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:35:43 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:35:54 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:36:10 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:36:41 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:38:29 America/Chicago] PHP Fatal error:  Class 'InstalledPrinter' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 66
+[04-Nov-2014 16:50:25 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:51:35 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:52:34 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:52:50 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:53:26 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:53:34 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:55:01 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:55:05 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:55:08 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:55:37 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:56:11 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:56:24 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:56:34 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:56:47 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 59
+[04-Nov-2014 16:57:10 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 58
+[04-Nov-2014 16:57:48 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 60
+[04-Nov-2014 16:58:10 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 61
+[04-Nov-2014 17:00:09 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 7
+[04-Nov-2014 17:01:12 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 7
+[04-Nov-2014 17:01:36 America/Chicago] PHP Fatal error:  Class 'DefaultPrinter' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 7
+[04-Nov-2014 17:24:08 America/Chicago] PHP Fatal error:  Class 'ClientPrintJob' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 61
+[04-Nov-2014 17:32:05 America/Chicago] PHP Fatal error:  Class 'InstalledPrinter' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:32:25 America/Chicago] PHP Fatal error:  Class 'InstalledPrinter' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:34:40 America/Chicago] PHP Fatal error:  Class 'InstalledPrinter' not found in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:35:22 America/Chicago] PHP Fatal error:  Call to undefined method MY_Loader::InstalledPrinter() in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:36:08 America/Chicago] PHP Fatal error:  Cannot redeclare InstalledPrinter::serialize() in /home2/grupoi5/public_html/app/application/libraries/installedprinter.php on line 34
+[04-Nov-2014 17:36:33 America/Chicago] PHP Fatal error:  Call to undefined method MY_Loader::InstalledPrinter() in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:38:14 America/Chicago] PHP Fatal error:  Call to undefined method MY_Loader::InstalledPrinter() in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:38:45 America/Chicago] PHP Fatal error:  Call to undefined method MY_Loader::installedprinter() in /home2/grupoi5/public_html/app/application/views/cms/plugin_certificado_cambio.php on line 67
+[04-Nov-2014 17:40:27 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/libraries/clientprintjob.php on line 59
+[04-Nov-2014 17:40:43 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/libraries/clientprintjob.php on line 59
+[04-Nov-2014 17:41:27 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/libraries/clientprintjob.php on line 59
+[04-Nov-2014 17:41:32 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/libraries/clientprintjob.php on line 59
+[04-Nov-2014 17:42:00 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/libraries/clientprintjob.php on line 59
+[04-Nov-2014 17:42:32 America/Chicago] PHP Fatal error:  Class 'Utils' not found in /home2/grupoi5/public_html/app/application/libraries/clientprintjob.php on line 59
+[04-Nov-2014 18:06:05 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_certificado_cambio.php on line 183
+[10-Jan-2015 00:09:13 America/Chicago] PHP Fatal error:  Call to a member function pdf_service() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 357
+[10-Jan-2015 00:14:00 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 196
+[10-Jan-2015 00:16:14 America/Chicago] PHP Fatal error:  Call to a member function Output() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 191
+[10-Jan-2015 00:19:21 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 196
+[10-Jan-2015 00:22:38 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 196
+[10-Jan-2015 00:22:45 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 196
+[10-Jan-2015 00:46:10 America/Chicago] PHP Fatal error:  Call to a member function SetFont() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 214
+[10-Jan-2015 00:46:39 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 217
+[10-Jan-2015 00:47:13 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 213
+[10-Jan-2015 00:48:10 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 212
+[10-Jan-2015 00:48:44 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 211
+[10-Jan-2015 00:49:02 America/Chicago] PHP Fatal error:  Call to a member function SetFont() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 213
+[10-Jan-2015 00:49:35 America/Chicago] PHP Fatal error:  Call to a member function SetFont() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 213
+[10-Jan-2015 14:09:13 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_proceso_reclamo::fw_export() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 357
+[10-Jan-2015 14:21:40 America/Chicago] PHP Fatal error:  Call to a member function SetFont() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 211
+[12-Jan-2015 19:39:37 America/Chicago] PHP Fatal error:  Call to a member function SetY() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 270
+[12-Jan-2015 20:51:06 America/Chicago] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home2/grupoi5/public_html/app/application/controllers/cron.php on line 13
+[12-Jan-2015 21:38:43 America/Chicago] PHP Fatal error:  Call to undefined method CI_DB_mysql_driver::result() in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_reclamos.php on line 134
+[12-Jan-2015 21:39:12 America/Chicago] PHP Fatal error:  Call to a member function result() on a non-object in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_reclamos.php on line 134
+[16-Apr-2015 20:16:18 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_reclamos::Cell() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_reclamos.php on line 194
+[16-Apr-2015 20:59:41 America/Chicago] PHP Parse error:  syntax error, unexpected ',', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 192
+[16-Apr-2015 21:06:12 America/Chicago] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 196
+[17-Aug-2015 14:47:42 America/Chicago] PHP Fatal error:  Call to a member function where() on a non-object in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_reclamos.php on line 183
+[17-Aug-2015 14:49:39 America/Chicago] PHP Fatal error:  Call to a member function result() on a non-object in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_reclamos.php on line 187
+[17-Aug-2015 15:04:35 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/views/cms/panel_inicio.php on line 26
+[17-Aug-2015 15:07:26 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 264
+[17-Aug-2015 15:07:53 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 264
+[17-Aug-2015 15:08:10 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 264
+[17-Aug-2015 15:08:38 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 264
+[17-Aug-2015 15:09:12 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 265
+[17-Aug-2015 15:12:45 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 265
+[17-Aug-2015 15:13:08 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/panel_inicio.php on line 265
+[23-Dec-2015 13:00:55 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_proceso_reclamo::plugin_update() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 29
+[23-Dec-2015 13:01:11 America/Chicago] PHP Fatal error:  Call to undefined method Plugin_proceso_reclamo::plugin_update() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 29
+[23-Dec-2015 13:01:43 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 92
+[23-Dec-2015 13:02:28 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 93
+[23-Dec-2015 13:02:44 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 93
+[23-Dec-2015 13:03:44 America/Chicago] PHP Fatal error:  Call to a member function get_reclaim() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_proceso_reclamo.php on line 95
+[05-Apr-2016 13:35:16 America/Chicago] PHP Fatal error:  Call to a member function staff_list() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_staff.php on line 118
+[05-Apr-2016 16:34:32 America/Chicago] PHP Fatal error:  Call to a member function total_rows() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_commissions.php on line 38
+[05-Apr-2016 16:35:05 America/Chicago] PHP Fatal error:  Call to a member function list_rows() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_commissions.php on line 53
+[05-Apr-2016 18:06:13 America/Chicago] PHP Fatal error:  Call to a member function total_rows() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 40
+[05-Apr-2016 18:06:45 America/Chicago] PHP Fatal error:  Call to a member function list_rows() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 55
+[05-Apr-2016 20:14:34 America/Chicago] PHP Fatal error:  Call to undefined function calculo_total_devengado() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 132
+[05-Apr-2016 22:38:22 America/Chicago] PHP Parse error:  syntax error, unexpected '[' in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 88
+[06-Apr-2016 19:11:35 America/Chicago] PHP Fatal error:  Call to a member function list_rows() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 229
+[06-Apr-2016 20:50:08 America/Chicago] PHP Fatal error:  Call to a member function diff() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 244
+[07-Apr-2016 13:09:27 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'DateTime::__construct(): Failed to parse time string (2016415) at position 6 (5): Unexpected character' in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php:240
+Stack trace:
+#0 /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php(240): DateTime->__construct('2016415')
+#1 /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php(212): Plugin_payrolls->bono14(Object(stdClass))
+#2 /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php(140): Plugin_payrolls->calculo_total_devengado('1', '2016-02-29', '2016-03-30', '21', '62500', '30678', '200322', '138799')
+#3 [internal function]: Plugin_payrolls->post_new_val()
+#4 /home2/grupoi5/public_html/app/system/core/CodeIgniter.php(359): call_user_func_array(Array, Array)
+#5 /home2/grupoi5/public_html/app/index.php(202): require_once('/home2/grupoi5/...')
+#6 {main}
+  thrown in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 240
+[14-Apr-2016 22:35:52 America/Chicago] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 79 bytes) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 338
+[14-Apr-2016 22:36:04 America/Chicago] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 79 bytes) in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 338
+[15-Apr-2016 13:04:39 America/Chicago] PHP Fatal error:  Call to undefined method Cms_plugin_staff::list_vacations() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_staff_vacations.php on line 54
+[15-Apr-2016 13:05:09 America/Chicago] PHP Fatal error:  Call to a member function result() on a non-object in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_staff_vacations.php on line 39
+[15-Apr-2016 13:19:35 America/Chicago] PHP Fatal error:  Call to a member function get_staff_list() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_staff_vacations.php on line 141
+[15-Apr-2016 13:42:39 America/Chicago] PHP Fatal error:  Class 'Cms_plugin_vacations' not found in /home2/grupoi5/public_html/app/system/core/Loader.php on line 303
+[15-Apr-2016 18:47:27 America/Chicago] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 90 bytes) in /home2/grupoi5/public_html/app/system/database/drivers/mysql/mysql_result.php on line 167
+[15-Apr-2016 18:48:01 America/Chicago] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 90 bytes) in /home2/grupoi5/public_html/app/system/database/drivers/mysql/mysql_result.php on line 167
+[16-Apr-2016 12:52:24 America/Chicago] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 234
+[18-Apr-2016 15:09:51 America/Chicago] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 32 bytes) in /home2/grupoi5/public_html/app/system/database/DB_active_rec.php on line 1981
+[18-Apr-2016 15:41:27 America/Chicago] PHP Fatal error:  Unsupported operand types in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 430
+[18-Apr-2016 15:42:23 America/Chicago] PHP Fatal error:  Unsupported operand types in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 430
+[18-Apr-2016 16:49:39 America/Chicago] PHP Fatal error:  Unsupported operand types in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 470
+[18-Apr-2016 16:50:05 America/Chicago] PHP Fatal error:  Unsupported operand types in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 471
+[18-Apr-2016 18:34:45 America/Chicago] PHP Fatal error:  Call to undefined function get_date() in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 326
+[20-Apr-2016 20:18:49 America/Chicago] PHP Fatal error:  Call to a member function get() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/panel_login.php on line 70
+[28-Apr-2016 12:55:06 America/Chicago] PHP Fatal error:  Call to a member function Cell() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 385
+[28-Apr-2016 12:58:54 America/Chicago] PHP Fatal error:  Call to undefined method FW_export::Image() in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 170
+[28-Apr-2016 16:42:03 America/Chicago] PHP Fatal error:  Call to a member function pdfpayroll_body() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 472
+[28-Apr-2016 16:42:38 America/Chicago] PHP Fatal error:  Call to a member function Output() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 476
+[28-Apr-2016 16:48:32 America/Chicago] PHP Fatal error:  Call to undefined method PDF::pdfpayroll_body() in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 472
+[28-Apr-2016 19:45:26 America/Chicago] PHP Fatal error:  Call to a member function Output() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 475
+[28-Apr-2016 19:45:40 America/Chicago] PHP Fatal error:  Call to a member function Output() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 475
+[28-Apr-2016 19:52:12 America/Chicago] PHP Fatal error:  Call to a member function Output() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 475
+[28-Apr-2016 21:15:52 America/Chicago] PHP Fatal error:  Call to a member function Output() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 476
+[28-Apr-2016 21:16:22 America/Chicago] PHP Fatal error:  Call to a member function pdfpayroll_body() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 474
+[28-Apr-2016 22:28:42 America/Chicago] PHP Fatal error:  Cannot redeclare FW_export::pdfpayroll() in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 475
+[01-May-2016 15:01:49 America/Chicago] PHP Fatal error:  Call to a member function payrolls_nonsent() on a non-object in /home2/grupoi5/public_html/app/application/core/MY_Loader.php on line 48
+[02-May-2016 18:30:04 America/Chicago] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 516
+[02-May-2016 20:03:31 America/Chicago] PHP Fatal error:  Call to a member function enable_profiler() on a non-object in /home2/grupoi5/public_html/app/application/libraries/FW_export.php on line 51
+[02-May-2016 20:07:27 America/Chicago] PHP Parse error:  syntax error, unexpected '=' in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 508
+[02-May-2016 21:36:25 America/Chicago] PHP Fatal error:  Unsupported operand types in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 390
+[02-May-2016 21:50:31 America/Chicago] PHP Fatal error:  Call to a member function format() on a non-object in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 469
+[15-May-2016 13:07:19 America/Chicago] PHP Parse error:  syntax error, unexpected ';' in /home2/grupoi5/public_html/app/application/controllers/cms/plugin_payrolls.php on line 540
+[24-May-2016 15:27:12 America/Chicago] PHP Fatal error:  Call to undefined method CI_DB_mysql_result::get() in /home2/grupoi5/public_html/app/application/models/cms/cms_plugin_payrolls.php on line 87
