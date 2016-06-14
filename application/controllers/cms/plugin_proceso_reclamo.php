@@ -299,13 +299,39 @@ class Plugin_proceso_reclamo extends PL_Controller {
 	  	$order	= array('order' => $order);
 	  	$this->load->library('FW_export', $order);
 		
-		return $pdf = $this->fw_export->pdf_service();
+		//Actualizar datos de la orden
+		$update_data	= array(
+							'PROCESS_STAGE'							=> 'ENTREGA',
+							'PROCESS_APPROVED'						=> 'SI',
+							'PROCESS_PASSCODE'						=> NULL,
+							'PROCESS_FINISHED'						=> date('Y-m-d')
+						);
+		
+		$update = $this->plugin_reclamos->update($update_data, $order['order']);
+		if($update):
+			return $pdf = $this->fw_export->pdf_service();
+		else:
+			echo "Error al tratar de actualizar.";
+		endif;
 	  }
 	  public function pdf_service_denied($order){
 	  	$order	= array('order' => $order);
 	  	$this->load->library('FW_export', $order);
 		
-		return $pdf = $this->fw_export->pdf_service_denied();
+		//Actualizar datos de la orden
+		$update_data	= array(
+							'PROCESS_STAGE'							=> 'ENTREGA',
+							'PROCESS_APPROVED'						=> 'NO',
+							'PROCESS_PASSCODE'						=> NULL,
+							'PROCESS_FINISHED'						=> date('Y-m-d')
+						);
+		
+		$update = $this->plugin_reclamos->update($update_data, $order['order']);
+		if($update):
+			return $pdf = $this->fw_export->pdf_service_denied();
+		else:
+			echo "Error al tratar de actualizar.";
+		endif;
 	  }
 	  public function pdf_upgrade($order){		
 	  	//Datos de impresión
