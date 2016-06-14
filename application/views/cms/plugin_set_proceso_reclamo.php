@@ -57,6 +57,7 @@
 				<button class="btn btn-danger" data-toggle="modal" data-target="#denied">Denegar y Enviar</button>
 				<?php endif;?>
 				<?php echo anchor('cms/'.strtolower($this->current_plugin).'/update_table_row/'.$data->ID, $this->plugin_button_cancel, array('class'=>'btn btn-default')).' ';?>
+				<?php if($print_order):?>
 				<div class="btn-group pull-right">
 					<a type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="glyphicon glyphicon-print"></span> Imprimir ticket de entrega <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
@@ -65,6 +66,9 @@
 						<li><?php echo anchor('cms/'.strtolower($this->current_plugin).'/pdf_service_denied/'.$data->ID, "Cancelaci&oacute;n de proceso", array('target'=>'_blank'));?></li>
 					</ul>
 				</div>
+				<?php else:?>
+				<button class="btn btn-info pull-right" data-toggle="modal" data-target="#no-print">Imprimir ticket de entrega</button>
+				<?php endif?>
 			</div>
 			<?php endif;?>
 			<!-- Modal de confirmación de envío -->
@@ -98,6 +102,24 @@
 						</div>
 						<div class="modal-footer">
 							<?php echo form_submit(array('value' => $this->plugin_button_denied, 'class' => 'btn btn-danger', 'name' => 'POST_SUBMIT')).' ';?>
+							<?php echo anchor('cms/'.strtolower($this->current_plugin), $this->plugin_button_cancel, array('class'=>'btn btn-default', 'data-dismiss' => 'modal')).' ';?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal de confirmación de envío -->
+			<div class="modal fade" id="no-print" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">Imprimir entrega</h4>
+						</div>
+						<div class="modal-body">
+							<p class="lead">Para poder entregar producto y cerrar la orden, se debe primero guardar y enviar la orden con la información de garant&iacute;a recibida por TUMI.<br />Presionar Guardar y enviar Cambios y luego ir a Proceso del reclamo y buscar con el bot&oacute;n Estado del proceso dentro del listado de Aprobaci&oacute;n</p>
+						</div>
+						<div class="modal-footer">
+							<?php echo form_submit(array('value' => $this->plugin_button_update, 'class' => 'btn btn-primary', 'name' => 'POST_SUBMIT')).' ';?>
 							<?php echo anchor('cms/'.strtolower($this->current_plugin), $this->plugin_button_cancel, array('class'=>'btn btn-default', 'data-dismiss' => 'modal')).' ';?>
 						</div>
 					</div>

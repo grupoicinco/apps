@@ -167,7 +167,8 @@ class Plugin_proceso_reclamo extends PL_Controller {
         
 		//Formulario
 		$data_array['form_html']			=	form_hidden('PROCESS_STAGE', $result_data->PROCESS_STAGE); 
-		$data_array['denied_process']		= 	FALSE; //Habilitar botón para denegar proceso
+		$data_array['denied_process']		= 	FALSE; //Habilitar botón para denegar proceso 
+		$data_array['print_order']			= 	($result_data->PROCESS_STAGE != "RECEPCION")?TRUE:FALSE; //Habilitar botón para imprimir proceso
 		
 		if($result_data->PROCESS_STAGE != "REPARACION" && $result_data->PROCESS_STAGE != "ENTREGA"): //Si no ha llegado al proceso de reparación
 		$data_array['denied_process']		= 	TRUE; //Habilitar botón para denegar proceso
