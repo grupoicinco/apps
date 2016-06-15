@@ -167,10 +167,11 @@ class Plugin_proceso_reclamo extends PL_Controller {
         
 		//Formulario
 		$data_array['form_html']			=	form_hidden('PROCESS_STAGE', $result_data->PROCESS_STAGE); 
+		$data_array['submit_buttons']		= 	($result_data->PROCESS_STAGE != "FINALIZADO")?TRUE:FALSE; //Mostrar botones de actualización y envío de reclamos
 		$data_array['denied_process']		= 	FALSE; //Habilitar botón para denegar proceso 
 		$data_array['print_order']			= 	($result_data->PROCESS_STAGE != "RECEPCION")?TRUE:FALSE; //Habilitar botón para imprimir proceso
 		
-		if($result_data->PROCESS_STAGE != "REPARACION" && $result_data->PROCESS_STAGE != "ENTREGA"): //Si no ha llegado al proceso de reparación
+		if($result_data->PROCESS_STAGE != "REPARACION" && $result_data->PROCESS_STAGE != "FINALIZADO" && $result_data->PROCESS_STAGE != "ENTREGA"): //Si no ha llegado al proceso de reparación
 		$data_array['denied_process']		= 	TRUE; //Habilitar botón para denegar proceso
 		
 		$data_array['form_html']			.= "<div class='form-group'>".form_label($this->plugin_display_array[15],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PROCESS_WARRANTYAVAIL', array('NO' => 'NO', 'SI' => 'SI'), array($result_data->PROCESS_WARRANTYAVAIL => $result_data->PROCESS_WARRANTYAVAIL), 'class="form-control"')."</div></div>";
@@ -179,9 +180,15 @@ class Plugin_proceso_reclamo extends PL_Controller {
 		$data_array['form_html']			.= "<div class='form-group'>".form_label($this->plugin_display_array[18],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_textarea(array('name' => 'PROCESS_DESCRIPTION', 'class' => 'form-control textarea', 'value' => $result_data->PROCESS_DESCRIPTION))."<p class='help-block'><span style='color:#F0AD4E;' class='glyphicon glyphicon-exclamation-sign'></span> Colocar la forma en que el proceso se llevar&aacute; a cabo, no escribir en forma de respuesta por correo electr&oacute;nico. En caso el reclamo no proceda con la pol&iacute;tica de garant&iacute;a, colocar la respuesta recibida por TUMI.</p></div></div>";
 		
 		elseif($result_data->PROCESS_STAGE != "ENTREGA"): //Si está en proceso de reparación
-		$data_array['form_html']			.="<blockquote><p>
-												Esta orden se encuentra en proceso de reparaci&oacute;n. 
-												Para hacer entrega del producto, seguir los siguientes pasos: 
+		$data_array['form_html']			.=($result_data->PROCESS_STAGE == "REPARACION")?"<blockquote>
+													<p>
+														Esta orden se encuentra en proceso de reparaci&oacute;n. 
+														Al finalizar la reparaci&oacute;n f&iacute;sica, presionar el botón azul que dice \"Guardar y Enviar cambios\" para establecer la orden como finalizada y pendiente de entrega.
+													</p>
+												</blockquote>":
+												"<blockquote><p>
+												Esta orden ya fue reparada y finalizada el proceso, &uacute;nicamente est&aacute; pendiente la entrega del producto. <br />
+												Para hacer entrega del reclamo seguir los siguientes pasos:
 												<ol>
 													<li>Imprimir el ticket de entrega con el boton celeste que dice \"Imprimir ticket de entrega\" seleccionando:
 													<ul>
@@ -192,7 +199,7 @@ class Plugin_proceso_reclamo extends PL_Controller {
 													<li>Archivar la copia firmada</li>
 													<li>Al haber obtenido la copia firmada por el cliente presionar el botón azul que dice \"Guardar y Enviar cambios\" para establecer la orden como entregada.</li>
 												</ol>
-												</p></blockquote>";		
+												</p></blockquote>";
 		else: //Si ya fue entregada
 			$data_array['enable_action_btns']	= FALSE;
 			if($result_data->PROCESS_APPROVED == 'NO'):
@@ -228,10 +235,12 @@ class Plugin_proceso_reclamo extends PL_Controller {
 		//Si el proceso 
 		if($this->input->post('PROCESS_STAGE') == 'REPARACION'):
 			$submit_posts['ID']					= $data_id;
-			$submit_posts['PROCESS_STAGE']		= 'ENTREGA';
+			$submit_posts['PROCESS_STAGE']		= 'FINALIZADO';
 			$submit_posts['PROCESS_FINISHED']	= date("Y-m-d");
 			$submit_posts['POST_SUBMIT']		= $this->plugin_button_update;
 			$submit_posts['PROCESS_PASSCODE']	= NULL;
+		elseif($this->input->post('PROCESS_STAGE') == 'FINALIZADO'):
+			$submit_posts['PROCESS_STAGE']		= 'ENTREGA';
 		else:
 			if ($this->form_validation->run('RECLAIM_PROCESS') != FALSE):
 				
@@ -285,8 +294,12 @@ class Plugin_proceso_reclamo extends PL_Controller {
 								'label' => 'Reparaci&oacute;n',
 								'color' => 'warning'
 								),
-			'ENTREGA'		=> array(
+			'FINALIZADO'	=> array(
 								'label' => 'Finalizado',
+								'color' => 'info'
+								),
+			'ENTREGA'		=> array(
+								'label' => 'Entregado',
 								'color' => 'success'
 								)
 		);

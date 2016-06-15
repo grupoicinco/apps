@@ -52,11 +52,13 @@
 			echo $form_html;
 			if($enable_action_btns == TRUE):?>
 			<div class="form-actions">
-				<button class="btn btn-primary" data-toggle="modal" data-target="#confirm">Guardar y Enviar Cambios</button>
-				<?php if($denied_process):?>
-				<button class="btn btn-danger" data-toggle="modal" data-target="#denied">Denegar y Enviar</button>
+				<?php if($submit_buttons):?>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#confirm">Guardar y Enviar Cambios</button>
+					<?php if($denied_process):?>
+						<button class="btn btn-danger" data-toggle="modal" data-target="#denied">Denegar y Enviar</button>
+					<?php endif;?>
+					<?php echo anchor('cms/'.strtolower($this->current_plugin).'/update_table_row/'.$data->ID, $this->plugin_button_cancel, array('class'=>'btn btn-default')).' ';?>
 				<?php endif;?>
-				<?php echo anchor('cms/'.strtolower($this->current_plugin).'/update_table_row/'.$data->ID, $this->plugin_button_cancel, array('class'=>'btn btn-default')).' ';?>
 				<?php if($print_order):?>
 				<div class="btn-group pull-right">
 					<a type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="glyphicon glyphicon-print"></span> Imprimir ticket de entrega <span class="caret"></span></a>

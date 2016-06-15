@@ -28,8 +28,9 @@
 							<li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index/'.(($this->uri->segment(4) == "")?'display_all':$this->uri->segment(4)))?>/RECEPCION/<?php echo $this->uri->segment(6)?>">Recepci&oacute;n</a></li>
 							<li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index/'.(($this->uri->segment(4) == "")?'display_all':$this->uri->segment(4)))?>/APROBACION/<?php echo $this->uri->segment(6)?>">Aprobaci&oacute;n</a></li>
 							<li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index/'.(($this->uri->segment(4) == "")?'display_all':$this->uri->segment(4)))?>/REPARACION/<?php echo $this->uri->segment(6)?>">Reparaci&oacute;n</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index/'.(($this->uri->segment(4) == "")?'display_all':$this->uri->segment(4)))?>/FINALIZADO/<?php echo $this->uri->segment(6)?>">Finalizado</a></li>
 							<li role="separator" class="divider"></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index/'.(($this->uri->segment(4) == "")?'display_all':$this->uri->segment(4)))?>/ENTREGA/<?php echo $this->uri->segment(6)?>">Finalizado</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index/'.(($this->uri->segment(4) == "")?'display_all':$this->uri->segment(4)))?>/ENTREGA/<?php echo $this->uri->segment(6)?>">Entregado</a></li>
 						</ul>
 					</div>
 				</div>
