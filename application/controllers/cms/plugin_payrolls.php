@@ -394,7 +394,7 @@ class Plugin_payrolls extends PL_Controller {
 			$bonosahorrados[]		= $bono->PAYROLL_14BONUS;
 		endforeach;
 		$savedbonus					= array_sum($bonosahorrados); //Obtener los bonos14 resguardados mes a mes
-		$total14bonus				= ($bonusinfo['totalreceivedmonthly'] * $bonusinfo['dayssalarypaid']) / 365;
+		$total14bonus				= (($bonusinfo['totalreceivedmonthly'] / 30) * $bonusinfo['dayssalarypaid']) * 0.083333;
 		$bonus14tosave				= $total14bonus - $savedbonus;
 		
 		$return['total14bonus']		= $total14bonus;

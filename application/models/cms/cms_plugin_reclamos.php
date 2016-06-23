@@ -184,7 +184,7 @@ class Cms_plugin_reclamos extends MY_Model {
 		 */
 		 public function total_pending_reclaims($total_reclaims = 10){
 		 	$query = $this->reclaims_query()
-		 	->where('PR.PROCESS_STAGE != "ENTREGA"')
+		 	->where('PR.PROCESS_STAGE != "ENTREGA" AND PR.PROCESS_STAGE != "FINALIZADO"')
 			->order_by('RECLAIM_DATE', 'DESC')
 			->limit($total_reclaims);
 			
