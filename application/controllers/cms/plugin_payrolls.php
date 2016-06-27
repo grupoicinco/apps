@@ -548,8 +548,8 @@ class Plugin_payrolls extends PL_Controller {
 			$totalearnedvacationsarray[$i] = array_sum($earnedvacationsdays); //Sumar periodos de vacaciones ganadas.
 		endforeach;
 		end($totalearnedvacationsarray);
-		$totalearnedvacationslastkey= key($totalearnedvacationsarray); 
-		$totalearnedvacationsarray[$totalearnedvacationslastkey] = $totalearnedvacationsarray[$totalearnedvacationslastkey] + $lasthoursearned;//Agregar decimales a último valor de array
+		$totalearnedvacationslastkey= (empty($totalearnedvacationsarray))?0:key($totalearnedvacationsarray);
+		$totalearnedvacationsarray[$totalearnedvacationslastkey] = (empty($totalearnedvacationsarray))?0:$totalearnedvacationsarray[$totalearnedvacationslastkey] + $lasthoursearned;//Agregar decimales a último valor de array
 		foreach ($totalearnedvacationsarray as $i => $totalearnedvacationsperiod): //Obtener los dias pendientes por cada período de vacaciones anuales ganadas.
 			$daysFromVacationsTaken[$i] = (isset($daysFromVacationsTaken[$i]))?$daysFromVacationsTaken[$i]:0; //Agregar ceros en los períodos de vacaciones en donde no se han tomado.
 			$pendingDays				= ($totalearnedvacationsperiod - $daysFromVacationsTaken[$i]); //Dias pendientes de vacaciones

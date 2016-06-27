@@ -234,7 +234,7 @@ class FW_posts {
 			//Establecer parámetros
 			$this->FW->email->from("contabilidad@grupoi5.com","Nómina ICINCO");
 			$this->FW->email->to($payroll_data->SALESMAN_EMAIL); 
-			$this->FW->email->cc($this->FW->fw_resource->get('RESOURCE_PAYROLL_MANAGEREMAIL'));
+			$this->FW->email->cc($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'));
 			$this->FW->email->attach($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payroll_data->ID.'.pdf'));
 			
 			$initialdate 	= mysql_date_to_dmy($payroll_data->PAYROLL_INITIALDATE);
@@ -264,7 +264,7 @@ class FW_posts {
 							)
 						);
 			$html_message = $this->_icinco_html_template($this->current_website, $html_body, $this->company, $this->tel, $this->contact_email);
-			$this->FW->email->message($html_message);
+			//$this->FW->email->message($html_message);
 			return $this->FW->email->send();
 		else:
 			return FALSE;
@@ -280,7 +280,7 @@ class FW_posts {
 			//Establecer parámetros
 			$this->FW->email->from("contabilidad@grupoi5.com","Nómina ICINCO");
 			$this->FW->email->to($payroll_data->SALESMAN_EMAIL);
-			$this->FW->email->cc($this->FW->fw_resource->get('RESOURCE_PAYROLL_MANAGEREMAIL'));
+			$this->FW->email->cc($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'));
 			$this->FW->email->attach($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/finiquito'.$payroll_data->ID.'.pdf'));
 			
 			$initialdate 	= mysql_date_to_dmy($payroll_data->PAYROLL_INITIALDATE);
