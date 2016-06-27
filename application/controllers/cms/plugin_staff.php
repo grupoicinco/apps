@@ -12,7 +12,7 @@ class Plugin_staff extends PL_Controller {
 		
 		//Load the plugin data
 		$this->plugin_action_table			= 'PLUGIN_SALESMAN';
-		$this->plugin_button_create			= "Guardar Datos";
+		$this->plugin_button_create			= "Crear nuevo empleado";
 		$this->plugin_button_cancel			= "Cancelar";
 		$this->plugin_button_update			= "Guardar Datos";
 		$this->plugin_button_delete			= "Eliminar";
