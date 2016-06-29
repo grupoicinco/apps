@@ -634,4 +634,77 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		return $pdf->Output($filename,'F');
 		
 	 }
+
+/**
+ * Función de planilla de salarios completa
+ */
+ 	public function pdf_general_payroll($payrolls, $payroll_stringdate, $bono14total, $aguinaldotot, $filename){
+ 		
+		//Iniciar el PDF
+	 	$pdf = new PDF();
+		$pdf->AddPage('L','Letter');
+		$pdf->SetFont('Arial','B',9);
+				
+		$pdf->Image(base_url('library/cms/img/logo-iCinco-negro.png'),10,7,40);
+		
+		$pdf->Cell(0, 5, "ICINCO Inversiones", 0, 0, "C");
+		$pdf->Ln(5);
+		$pdf->Cell(0, 5, "Planilla de $payroll_stringdate", 0, 0, "C");
+		$pdf->Ln(10);
+		$pdf->Cell(0, 5, "Planilla Salarios", 0, 0, "L");
+		
+		$pdf->SetFont('Arial','',9);
+		$pdf->Ln(5);
+		
+		//Planilla mensual
+		$header = array("No.", "Nombre", "Posición", "Días Laborados", "Salario Diario", "Salario Mensual", "Anticipo Quincena", "Bono Decreto", "Bono Venta", "Horas Extra", "Otro", "(-) ISR", "(-) IGSS", "(-) Otros", "Total fin de mes");
+		$data = array();
+		foreach($payrolls as $i => $payroll):
+			$data[$i] = array($payroll->SALESMAN_SAC_CODE, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payroll->SALESMAN_NAME.' '.$payroll->SALESMAN_LASTNAME))), $payroll->SALESMAN_POSITION, $payroll->PAYROLL_DAYSWORKED, number_format(($payroll->SALESMAN_SALARY / 30),2), number_format($payroll->PAYROLL_SALARYPAID, 2), $payroll->PAYROLL_HALFMONTH, $payroll->PAYROLL_ESTABLISHEDBONUS, $payroll->PAYROLL_COMMISSION, $payroll->PAYROLL_EXTRAHOURS, $payroll->PAYROLL_EXTRAINCOME, $payroll->PAYROLL_ISR, $payroll->PAYROLL_IGSS, $payroll->PAYROLL_EXTRADISCOUNT, ($payroll->PAYROLL_TOTALACCRUED - $payroll->PAYROLL_HALFMONTH));
+		endforeach;
+		$pdf->striped_table($header, $data, array(5,40, 30, 15, 16, 20, 16, 15, 15, 15, 15, 15, 15, 15, 20));
+		$pdf->Ln(3);
+		
+		//Bono 14
+		$header = array("No.", "Período", "Nombre", "Posición", "Dias", "Ingreso Promedio", "Salario", "Total bono 14", "Bono a guardar");
+		$data = array();
+		foreach($payrolls as $i => $payroll):
+			$data[$i] = array($payroll->SALESMAN_SAC_CODE, ("Del ".mysql_date_to_dmy($payroll->PAYROLL_14BONUSCOMMENCEMENT)." al ".mysql_date_to_dmy($payroll->PAYROLL_ENDDATE)), iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payroll->SALESMAN_NAME.' '.$payroll->SALESMAN_LASTNAME))), $payroll->SALESMAN_POSITION, $payroll->PAYROLL_14BONUSPENDING, number_format($payroll->PAYROLL_14BONUSSALARY,2), $payroll->SALESMAN_SALARY, number_format($payroll->PAYROLL_14BONUSTOTAL,2), number_format($payroll->PAYROLL_14BONUSSAVE,2));
+		endforeach;
+		$pdf->SetFont('Arial','B',9);
+		$pdf->Cell(0, 5, "Planilla Bono 14", 0, 0, "L");
+		$pdf->Ln(5);
+		$pdf->SetFont('Arial','',9);
+		$pdf->striped_table($header, $data, array(5,40, 40, 30, 16, 20, 20, 30, 20));
+		$pdf->SetFont('Arial','B',6);
+		$pdf->Ln(1);
+		$pdf->Cell(131, 5, "TOTAL:", 0, 0, "R");
+		$pdf->Cell(20, 5, number_format($bono14total->BONUSSALARY, 2), 0, 0, "L");
+		$pdf->Cell(20, 5, NULL, 0, 0, "R");
+		$pdf->Cell(30, 5, number_format($bono14total->BONUSTOTAL, 2), 0, 0, "L");
+		$pdf->Cell(20, 5, number_format($bono14total->BONUSSAVE, 2), 0, 0, "L");
+		$pdf->Ln(3);
+		
+		//Aguinaldo
+		$header = array("No.", "Período", "Nombre", "Posición", "Dias", "Ingreso Promedio", "Salario", "Total Aguinaldo", "Aguinaldo a guardar");
+		$data = array();
+		foreach($payrolls as $i => $payroll):
+			$data[$i] = array($payroll->SALESMAN_SAC_CODE, ("Del ".mysql_date_to_dmy($payroll->PAYROLL_AGUINALDOCOMMENCEMENT)." al ".mysql_date_to_dmy($payroll->PAYROLL_ENDDATE)), iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payroll->SALESMAN_NAME.' '.$payroll->SALESMAN_LASTNAME))), $payroll->SALESMAN_POSITION, $payroll->PAYROLL_AGUINALDODAYS, number_format($payroll->PAYROLL_AGUINALDOSALARY,2), $payroll->SALESMAN_SALARY, number_format($payroll->PAYROLL_AGUINALDOTOT,2), number_format($payroll->PAYROLL_AGUINALDOSAVE,2));
+		endforeach;
+		$pdf->SetFont('Arial','B',9);
+		$pdf->Cell(0, 5, "Planilla Aguinaldo", 0, 0, "L");
+		$pdf->Ln(5);
+		$pdf->SetFont('Arial','',9);
+		$pdf->striped_table($header, $data, array(5,40, 40, 30, 16, 20, 20, 30, 20));
+		$pdf->SetFont('Arial','B',6);
+		$pdf->Ln(1);
+		$pdf->Cell(131, 5, "TOTAL:", 0, 0, "R");
+		$pdf->Cell(20, 5, number_format($aguinaldotot->BONUSSALARY, 2), 0, 0, "L");
+		$pdf->Cell(20, 5, NULL, 0, 0, "R");
+		$pdf->Cell(30, 5, number_format($aguinaldotot->BONUSTOTAL, 2), 0, 0, "L");
+		$pdf->Cell(20, 5, number_format($aguinaldotot->BONUSSAVE, 2), 0, 0, "L");
+		
+		$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planillageneral'.$filename.'.pdf');
+		return $pdf->Output($filename,'F');
+ 	}
 }

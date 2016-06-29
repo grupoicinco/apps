@@ -22,6 +22,7 @@ class Plugin_payrolls extends PL_Controller {
 		$this->plugin_page_update			= "Editar Planillas";
 		$this->plugin_page_delete			= "Eliminar";
 		
+		$this->template_display				= "plugin_payroll_display";
 		$this->template_create				= "plugin_set_payrolls";
 		$this->template_update				= "plugin_update_payrolls";
 		
@@ -388,7 +389,8 @@ class Plugin_payrolls extends PL_Controller {
 		//Obtener el bono14
 		$payrollenddate 			= strtotime ( '-1 day' , strtotime ( $employeedata->PAYROLL_ENDDATE ) ) ;
 		$previousSavings			= date ( 'Y-m-d' , $payrollenddate); //Obtener la fecha anterior al cierre de planilla
-		$employee14bonus			= $this->plugin_payrolls->list_rows('PAYROLL_14BONUS', 'PAYROLL_EMPLOYEE = "'.$employeedata->ID.'" AND PAYROLL_ENDDATE BETWEEN "'.$bonusinfo['commencementdate'].'" AND "'.$previousSavings.'"'); 
+		$employeedata->PAYROLL_EMPLOYEE = (!isset($employeedata->PAYROLL_EMPLOYEE))?$employeedata->ID:$employeedata->PAYROLL_EMPLOYEE; //En caso no se envíe según información de planilla, sino únicamente de empleado.
+		$employee14bonus			= $this->plugin_payrolls->list_rows('PAYROLL_14BONUS', 'PAYROLL_EMPLOYEE = "'.$employeedata->PAYROLL_EMPLOYEE.'" AND PAYROLL_ENDDATE BETWEEN "'.$bonusinfo['commencementdate'].'" AND "'.$previousSavings.'"'); 
 		$bonosahorrados				= array();
 		foreach($employee14bonus as $bono):
 			$bonosahorrados[]		= $bono->PAYROLL_14BONUS;
@@ -415,7 +417,8 @@ class Plugin_payrolls extends PL_Controller {
 		//Obtener el aguinaldo
 		$payrollenddate 			= strtotime ( '-1 day' , strtotime ( $employeedata->PAYROLL_ENDDATE ) ) ;
 		$previousSavings			= date ( 'Y-m-d' , $payrollenddate); //Obtener la fecha anterior al cierre de planilla
-		$employeechristmasbonus		= $this->plugin_payrolls->list_rows('PAYROLL_AGUINALDO', 'PAYROLL_EMPLOYEE = "'.$employeedata->ID.'" AND PAYROLL_ENDDATE BETWEEN "'.$bonusinfo['commencementdate'].'" AND "'.$previousSavings.'"'); 
+		$employeedata->PAYROLL_EMPLOYEE = (!isset($employeedata->PAYROLL_EMPLOYEE))?$employeedata->ID:$employeedata->PAYROLL_EMPLOYEE; //En caso no se envíe según información de planilla, sino únicamente de empleado.
+		$employeechristmasbonus		= $this->plugin_payrolls->list_rows('PAYROLL_AGUINALDO', 'PAYROLL_EMPLOYEE = "'.$employeedata->PAYROLL_EMPLOYEE.'" AND PAYROLL_ENDDATE BETWEEN "'.$bonusinfo['commencementdate'].'" AND "'.$previousSavings.'"'); 
 		$bonosahorrados				= array();
 		foreach($employeechristmasbonus as $bono):
 			$bonosahorrados[]		= $bono->PAYROLL_AGUINALDO;
@@ -709,6 +712,71 @@ class Plugin_payrolls extends PL_Controller {
 			else:
 				$this->fw_alerts->add_new_alert(3002, 'ERROR');
 			endif;
+		endif;
+		
+		redirect('cms/'.strtolower($this->current_plugin));
+	}
+	
+	public function pdf_general_payroll($payrolls_month, $payroll_year){
+		//Fecha de la planilla
+		$payroll_date				= "$payroll_year-$payrolls_month-01";
+		$finaldate					= strtotime('+1 month', strtotime($payroll_date)); //Fecha inicial de cálculo de comisión
+		$finaldate					= date('Y-m-d',$finaldate);//Fecha para cálculo de comisiones
+		$payroll_stringdate			= date_components(); //Obtener componentes para fecha
+		$payroll_strmonth			= str_pad($payrolls_month, 2, 0, STR_PAD_LEFT); //Agregar cero a número de mes.
+		$payroll_stringdate			= $payroll_stringdate['meses'][$payroll_strmonth].", $payroll_year"; //Imprimir titulo de fecha de planilla.
+		$filename					= $payrolls_month.''.$payroll_year;
+		
+		//Obtener las planillas del mes seleccionado.
+		$where = "PSPR.PAYROLL_ENDDATE BETWEEN '$payroll_date' AND '$finaldate'";
+		$payrolls = $this->plugin_payrolls->payroll_list($where);
+		
+		//Obtener dias trabajados
+		$bono14ingresos 			= array();
+		$bono14total 				= array();
+		$bono14save 				= array();
+		$aguinaldoingresos			= array();
+		$aguinaldototal				= array();
+		$aguinaldosave				= array();
+		foreach($payrolls as $i => $payroll){
+			//Planilla del mes
+			$payroll->PAYROLL_DAYSWORKED 	= round($payroll->PAYROLL_SALARYPAID / ($payroll->SALESMAN_SALARY/30)); //Obtener dias trabajados.
+			$payroll->PAYROLL_HALFMONTH		= ($payroll->PAYROLL_DAYSWORKED >= 30)?($payroll->SALESMAN_SALARY / 2):0; //Obtener el pago de quincena.
+			
+			//Bono 14
+			$bono14							= $this->bono14($payroll, ($payroll->PAYROLL_TOTALACCRUED - $payroll->PAYROLL_ESTABLISHEDBONUS));
+			$payroll->PAYROLL_14BONUSTOTAL	= $bono14['total14bonus'];
+			$payroll->PAYROLL_14BONUSSAVE	= $bono14['bonus14tosave'];
+			$payroll->PAYROLL_14BONUSCOMMENCEMENT = $bono14['commencementdate'];
+			$payroll->PAYROLL_14BONUSSALARY	= $bono14['salariopromedio'];
+			$payroll->PAYROLL_14BONUSPENDING= $bono14['diaspendientes'];
+			
+			$bono14ingresos[$i]				= $bono14['salariopromedio'];
+			$bono14total[$i]				= $bono14['total14bonus'];
+			$bono14save[$i]					= $bono14['bonus14tosave'];
+			
+			//Aguinaldo
+			$aguinaldo						= $this->aguinaldo($payroll, ($payroll->PAYROLL_TOTALACCRUED - $payroll->PAYROLL_ESTABLISHEDBONUS));
+			$payroll->PAYROLL_AGUINALDOTOT	= $aguinaldo['totalchristmasbonus'];
+			$payroll->PAYROLL_AGUINALDOSAVE	= $aguinaldo['christmasbonustosave'];
+			$payroll->PAYROLL_AGUINALDOCOMMENCEMENT = $aguinaldo['commencementdate'];
+			$payroll->PAYROLL_AGUINALDOSALARY = $aguinaldo['salariopromedio'];
+			$payroll->PAYROLL_AGUINALDODAYS	= $aguinaldo['diaspendientes'];
+			
+			$aguinaldoingresos[$i]			= $aguinaldo['salariopromedio'];
+			$aguinaldototal[$i]				= $aguinaldo['totalchristmasbonus'];
+			$aguinaldosave[$i]				= $aguinaldo['christmasbonustosave'];
+		}
+		$bono14total = (object) array('BONUSSALARY' => array_sum($bono14ingresos), 'BONUSTOTAL' => array_sum($bono14total), 'BONUSSAVE' => array_sum($bono14save));
+		$aguinaldotot = (object) array('BONUSSALARY' => array_sum($aguinaldoingresos), 'BONUSTOTAL' => array_sum($aguinaldototal), 'BONUSSAVE' => array_sum($aguinaldosave));
+		
+		$this->fw_export->pdf_general_payroll($payrolls, $payroll_stringdate, $bono14total, $aguinaldotot, $filename);
+		
+		if(file_exists($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planillageneral'.$filename.'.pdf'))): //Confirmar si existe el archivo de planilla.
+			$this->fw_posts->payroll_total($payroll_stringdate, $filename); //Enviar el correo electrónico.
+			$this->fw_alerts->add_new_alert(3001, 'SUCCESS');
+		else:
+			$this->fw_alerts->add_new_alert(3002, 'ERROR');
 		endif;
 		
 		redirect('cms/'.strtolower($this->current_plugin));

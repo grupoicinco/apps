@@ -7,25 +7,53 @@
 		<div class="col-lg-12">
 			<div class="well">
 			<div class="row">
-				<div class="col-lg-3">
+				<div class="col-lg-8">
 					<a class="btn btn-primary" href="<?=base_url("cms/".$current_plugin."/create_new_row")?>"><?=$create_new_row?></a>
-				</div>
-				<div class="col-lg-1">&nbsp;</div>
-				<div class="col-lg-4">
-					<?php if($this->display_filter == 'SEARCH'):?>
-					<form class="form-search" style="float:right;" method="POST" action="<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/search_filter_redirect')?>">
-						<input type="text" class="input-medium search-query" name="SEARCH">
-						<button type="submit" class="btn">Search</button>
-					</form>
-					<?php endif;
-					if($this->display_filter == 'LIST'):
-						$js = 'id="LISTFILTER" onChange="listfilter_function();" class="form-control"';
-						echo form_dropdown('LISTFILTER', $filteroptions,$currentFilter,$js);
-					endif;?>
 				</div>
 				<div class="col-lg-4">
 					<?php echo $pagination;?>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="row">
+						<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+							<h6>Enviar planilla general</h6>
+						</div>
+					</div>
+					<div class="row" id="general_payroll_form">
+						<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+							<?php 
+							$datosfecha	= date_components();
+							echo form_dropdown('general_payroll_month', $datosfecha['meses'], date('m'), 'class="form-control"');
+							?>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<?php echo form_dropdown('general_payroll_year', $datosfecha['aAnteriores'], date('Y'), 'class="form-control"');?>
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+							<button class="btn btn-block btn-default" data-toggle="modal" data-target="#gral_payroll_email_confirmation" id="general_form_submit"><span class="glyphicon glyphicon-envelope"></span> Enviar</button>
+						</div>
+					</div>
+					<div class="modal fade" id="gral_payroll_email_confirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="gral_payroll_email_confirmation">¿Enviar la Planilla General?</h4>
+								</div>
+								<div class="modal-body">
+									<p>¿Confirmas que deseas enviar la planilla general por correo electr&oacute;nico a la cuenta encargada?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									<button type="button" onclick="email_general_payroll();" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Enviar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6"></div>
 			</div>
 			</div>
 		</div>
@@ -54,5 +82,10 @@
 		var filter = $('select#LISTFILTER').val();
 		
 		location.href = '<?php echo $this->config->site_url('cms/'.strtolower($this->current_plugin).'/index')?>/'+filter+'/<?php echo $this->uri->segment(5)?>';
+	}
+	function email_general_payroll(){
+		var general_payroll_month = $('#general_payroll_form select[name="general_payroll_month"]').val();
+		var general_payroll_year = $('#general_payroll_form select[name="general_payroll_year"]').val();
+		window.location.href = "<?=base_url('cms/plugin_payrolls/pdf_general_payroll')?>/"+general_payroll_month+"/"+general_payroll_year;
 	}
 </script>

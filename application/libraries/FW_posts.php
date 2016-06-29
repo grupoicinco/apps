@@ -271,7 +271,7 @@ class FW_posts {
 		endif;
 	 }
 	/**
-	 * Función para enviar correo de planillas
+	 * Función para enviar correo de planillas individuales
 	 * @var $payroll_data - Objeto con los datos de la planilla a enviar.
 	 */
 	 public function payroll_settlement($payroll_data){
@@ -308,6 +308,39 @@ class FW_posts {
 			return FALSE;
 		endif;
 	 }
+	/**
+	 * Función para enviar planilla general total de mes
+	 * @var $payroll_date - Mes de la planilla a enviar
+	 * @var $payroll_file - Nombre del archivo de la planilla general.
+	 */
+	 public function payroll_total($payroll_date, $payroll_file){
+	 	
+		if(!empty($payroll_date)):
+			//Establecer parámetros
+			$this->FW->email->from("contabilidad@grupoi5.com","Nómina ICINCO");
+			$this->FW->email->to($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'));
+			//$this->FW->email->cc($this->FW->fw_resource->request('RESOURCE_PAYROLL_SUBMANAGEREMAIL'));
+			$this->FW->email->attach($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planillageneral'.$payroll_file.'.pdf'));
+			
+			$this->FW->email->subject('Planilla total de '.$payroll_date);
+			$html_body = array(
+							array(
+								'LABEL' 	=> NULL,
+								'POSTVAL'	=> "Adjunto se encuentra la planilla general de todos los empleados con datos del mes y acumulados y reserva de bono 14 y aguinaldo."
+							),
+							array(
+								'LABEL' 	=> 'Fecha de planilla',
+								'POSTVAL'	=> $payroll_date
+							)
+						);
+			$html_message = $this->_icinco_html_template($this->current_website, $html_body, $this->company, $this->tel, $this->contact_email);
+			$this->FW->email->message($html_message);
+			return $this->FW->email->send();
+		else:
+			return FALSE;
+		endif;
+	 }
+
 	/**
 	 * Template del HTML a enviar por correo
 	 */

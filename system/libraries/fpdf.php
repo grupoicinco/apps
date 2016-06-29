@@ -36,6 +36,35 @@ class PDF extends FPDF{
 	function Header(){
 		
 	}
+	function striped_table($header, $data, $w = array(40, 35, 45, 40)){
+		// Colores, ancho de línea y fuente en negrita
+	    $this->SetFillColor(60,60,60);
+	    $this->SetTextColor(255);
+	    $this->SetLineWidth(.3);
+	    $this->SetFont('','B');
+		$this->SetFontSize(6);
+	    // Cabecera
+	    for($i=0;$i<count($header);$i++)
+	        $this->Cell($w[$i],6,$header[$i],1,0,'L',true);
+	    $this->Ln();
+	    // Restauración de colores y fuentes
+	    $this->SetFillColor(224,235,255);
+	    $this->SetTextColor(0);
+	    $this->SetFont('');
+	    // Datos
+	    $fill = false;
+	    foreach($data as $row)
+	    {
+	    	foreach($row as $i => $cell):
+	        $this->Cell($w[$i],5,$row[$i],'LR',0,'L',$fill);
+			endforeach;
+	        $this->Ln();
+	        $fill = !$fill;
+	    }
+	    // Línea de cierre
+	    $this->Cell(array_sum($w),0,'','T');
+		$this->Ln(1);
+	}
 	/**
 	* Draws text within a box defined by width = w, height = h, and aligns
 	* the text vertically within the box ($valign = M/B/T for middle, bottom, or top)
