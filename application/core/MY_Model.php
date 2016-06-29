@@ -66,9 +66,9 @@
 		 * $data - arrego asosciativo con columnas => nuevos valores
 		 * $id - id del registro que se quiere actualizar
 		 */
-		public function update($data, $id) {
+		public function update($data, $id = NULL, $where = NULL) {
 			
-			$this->db->where('ID', $id);			
+			if(is_null($where)):$this->db->where('ID', $id);else:$this->db->where($where);endif;			
 			return $this->db->update($this->_table, $data);
 			
 		}

@@ -108,6 +108,13 @@ class Plugin_payrolls extends PL_Controller {
 													$("[data-toggle=\"tooltip\"]").tooltip()
 												})
 												</script>';
+		//Variables para cierre de mes
+		$closed_month						= $this->plugin_payrolls->last_closed_month(); //Obtener el último mes cerrado
+		$data_array['closed_month']			= (object) array('CLOSED_MONTH' => $closed_month->PAYROLL_MONTH, 'CLOSED_YEAR' => $closed_month->PAYROLL_YEAR); //Enviar el mes cerrado
+		$close_date							= $closed_month->PAYROLL_YEAR.'-'.$closed_month->PAYROLL_MONTH; //Generar el mes cerrado en una variable
+		$open_year							= date('Y', strtotime("$close_date next month")); //Año abierta para planilla
+		$open_month							= date('m', strtotime("$close_date next month")); //Mes abierta para planilla
+		$data_array['open_month']			= (object) array('OPEN_MONTH' => $open_month, 'OPEN_YEAR' => $open_year); //Enviar el mes abierto
 		
 		return $data_array;
 	}
@@ -150,30 +157,34 @@ class Plugin_payrolls extends PL_Controller {
 		
 		$employees					= $this->get_staff_list();
 		$liquidacion				= array('NO' => 'No', 'SI' => 'Si - Sin indemnizaci&oacute;n', 'INDEMNIZAR' => 'Si - Con indemnizaci&oacute;n');
+		$selectdisabled				= ($result_data->PAYROLL_CLOSE == 'NO')?"":"disabled = 'disabled'";
+		$disabled					= ($result_data->PAYROLL_CLOSE == 'NO')?array():array("disabled" => "disabled");
+		$closemessage				= ($result_data->PAYROLL_CLOSE == 'NO')?'':'<div class="alert alert-danger" role="alert"><p>Esta planilla pertenece a un per&iacute;odo cerrado.</p></div>';
 		
-		$data_array['form_html']	=  form_open_multipart('cms/'.strtolower($this->current_plugin).'/post_update_val/'.$result_data->ID, array('class' => 'form-horizontal', 'role' => 'form'));
+		$data_array['form_html']	=  $closemessage;
+		$data_array['form_html']	.= form_open_multipart('cms/'.strtolower($this->current_plugin).'/post_update_val/'.$result_data->ID, array('class' => 'form-horizontal', 'role' => 'form'));
 		$data_array['form_html']	.= form_hidden('POST_ID', $result_data->ID);
 		$data_array['form_html']	.=  "<div class='row'><div class='col-lg-12 col-md-12 col-sm-12'>".validation_errors()."</div></div>";
 		
 		//Formulario
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[1],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_EMPLOYEE', $employees, $result_data->PAYROLL_EMPLOYEE, 'class="form-control"')."</div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[1],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_EMPLOYEE', $employees, $result_data->PAYROLL_EMPLOYEE, 'class="form-control" '.$selectdisabled)."</div></div>";
 		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[2],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_INITIALDATE', 'value' => $result_data->PAYROLL_INITIALDATE, 'class' => 'form-control', 'data-date-format' => 'YYYY-MM-DD',  'readonly' => 'readonly'))."<p class='help-block'>Fecha inicial para contabilizar dias laborados en pago planilla.</p></div></div>";
-		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[3],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_ENDDATE', 'value' => $result_data->PAYROLL_ENDDATE, 'class' => 'datetimepicker form-control', 'data-date-format' => 'YYYY-MM-DD'))."<p class='help-block'>Fecha final para contabilizar en pago de planilla.</p></div></div>";
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[12],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_SETTLEMENT', $liquidacion,$result_data->PAYROLL_SETTLEMENT, 'class="form-control" id="PAYROLL_SETTLEMENT"')."<p class='help-block'>Seleccionar si es la planilla de liquidaci&oacute;n de empleado. En caso haya que liquidar, seleccionar si se pagar&aacute; indemnizaci&oacute;n o no.</p></div></div>";
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[6],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_SALESGOAL', 'value' => $result_data->PAYROLL_SALESGOAL, 'class' => 'form-control', 'type' => 'text'))."</div><p class='help-block'>Meta individual para asesores. Ventas sin IVA.</p></div></div>";
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[4],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_SALES', 'value' => $result_data->PAYROLL_SALES, 'class' => 'form-control', 'type' => 'text'))."</div><p class='help-block'>Ventas alcanzadas individualmente para asesores. Ventas sin IVA.</p></div></div>";
-		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[5],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_EXTRAHOURS', 'value'  => $result_data->PAYROLL_EXTRAHOURS, 'class' => 'form-control'))."<p class='help-block'>&Uacute;nicamente monto de horas extra trabajadas, sin contar horas por días festivos.</p></div></div>";
-		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[9],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_FESTIVEHOURS', 'value' => $result_data->PAYROLL_FESTIVEHOURS, 'class' => 'form-control'))."<p class='help-block'>&Uacute;nicamente monto de horas de días festivos trabajadas.</p></div></div>";
-		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[10],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='row'><div class='col-lg-4'><div class='input-group'><span class='input-group-addon'>Q.</span>".form_input(array('name' => 'PAYROLL_EXTRAINCOME', 'value' =>$result_data->PAYROLL_EXTRAINCOME, 'class' => 'form-control', 'type' => 'text'))."</div></div><div class='col-lg-8'>".form_input(array('name' => 'PAYROLL_EXTRAINCOMEDESCRIPTION','value' =>$result_data->PAYROLL_EXTRAINCOMEDESCRIPTION, 'placeholder' => 'Descripción. (Bono por venta de maletas Árrive)',  'class' => 'form-control', 'type' => 'text'))."</div></div><p class='help-block'>Monto y descripci&oacute;n de bono extra a agregar en planilla. E.g. (Bonos promocionales para impulsar ventas de cierta línea.)</p></div></div>";
-		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[11],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='row'><div class='col-lg-4'><div class='input-group'><span class='input-group-addon'>Q.</span>".form_input(array('name' => 'PAYROLL_EXTRADISCOUNT','value' =>$result_data->PAYROLL_EXTRADISCOUNT, 'class' => 'form-control', 'type' => 'text'))."</div></div><div class='col-lg-8'>".form_input(array('name' => 'PAYROLL_EXTRADISCOUNTDESCRIPTION','value' =>$result_data->PAYROLL_EXTRADISCOUNTDESCRIPTION, 'placeholder' => 'Descripción. (Por producto 022060D2 desaparecido.)',  'class' => 'form-control', 'type' => 'text'))."</div></div><p class='help-block'>Monto y descripci&oacute;n de descuento extra a agregar en planilla. E.g. (Descuentos por producto desaparecido.)</p></div></div>";
+		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[3],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_ENDDATE', 'value' => $result_data->PAYROLL_ENDDATE, 'class' => 'datetimepicker form-control', 'data-date-format' => 'YYYY-MM-DD')+$disabled)."<p class='help-block'>Fecha final para contabilizar en pago de planilla.</p></div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[12],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_SETTLEMENT', $liquidacion,$result_data->PAYROLL_SETTLEMENT, 'class="form-control" id="PAYROLL_SETTLEMENT" '.$selectdisabled)."<p class='help-block'>Seleccionar si es la planilla de liquidaci&oacute;n de empleado. En caso haya que liquidar, seleccionar si se pagar&aacute; indemnizaci&oacute;n o no.</p></div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[6],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_SALESGOAL', 'value' => $result_data->PAYROLL_SALESGOAL, 'class' => 'form-control', 'type' => 'text') + $disabled)."</div><p class='help-block'>Meta individual para asesores. Ventas sin IVA.</p></div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[4],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_SALES', 'value' => $result_data->PAYROLL_SALES, 'class' => 'form-control', 'type' => 'text') + $disabled)."</div><p class='help-block'>Ventas alcanzadas individualmente para asesores. Ventas sin IVA.</p></div></div>";
+		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[5],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_EXTRAHOURS', 'value'  => $result_data->PAYROLL_EXTRAHOURS, 'class' => 'form-control') + $disabled)."<p class='help-block'>&Uacute;nicamente monto de horas extra trabajadas, sin contar horas por días festivos.</p></div></div>";
+		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[9],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_FESTIVEHOURS', 'value' => $result_data->PAYROLL_FESTIVEHOURS, 'class' => 'form-control') + $disabled)."<p class='help-block'>&Uacute;nicamente monto de horas de días festivos trabajadas.</p></div></div>";
+		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[10],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='row'><div class='col-lg-4'><div class='input-group'><span class='input-group-addon'>Q.</span>".form_input(array('name' => 'PAYROLL_EXTRAINCOME', 'value' =>$result_data->PAYROLL_EXTRAINCOME, 'class' => 'form-control', 'type' => 'text') + $disabled)."</div></div><div class='col-lg-8'>".form_input(array('name' => 'PAYROLL_EXTRAINCOMEDESCRIPTION','value' =>$result_data->PAYROLL_EXTRAINCOMEDESCRIPTION, 'placeholder' => 'Descripción. (Bono por venta de maletas Árrive)',  'class' => 'form-control', 'type' => 'text') + $disabled)."</div></div><p class='help-block'>Monto y descripci&oacute;n de bono extra a agregar en planilla. E.g. (Bonos promocionales para impulsar ventas de cierta línea.)</p></div></div>";
+		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[11],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='row'><div class='col-lg-4'><div class='input-group'><span class='input-group-addon'>Q.</span>".form_input(array('name' => 'PAYROLL_EXTRADISCOUNT','value' =>$result_data->PAYROLL_EXTRADISCOUNT, 'class' => 'form-control', 'type' => 'text') + $disabled)."</div></div><div class='col-lg-8'>".form_input(array('name' => 'PAYROLL_EXTRADISCOUNTDESCRIPTION','value' =>$result_data->PAYROLL_EXTRADISCOUNTDESCRIPTION, 'placeholder' => 'Descripción. (Por producto 022060D2 desaparecido.)',  'class' => 'form-control', 'type' => 'text') + $disabled)."</div></div><p class='help-block'>Monto y descripci&oacute;n de descuento extra a agregar en planilla. E.g. (Descuentos por producto desaparecido.)</p></div></div>";
 		$data_array['form_html']	.= "<h4>Datos encargado y administraci&oacute;n</h4>";
 		$data_array['form_html']	.= "<hr />";
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[7],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_STORESALESGOAL', 'value' => $result_data->PAYROLL_STORESALESGOAL, 'class' => 'form-control', 'type' => 'text'))."</div><p class='help-block'>Meta de tiendas para encargado. Ventas sin IVA.</p></div></div>";
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[8],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_STORESALES', 'value' => $result_data->PAYROLL_STORESALES, 'class' => 'form-control', 'type' => 'text'))."</div><p class='help-block'>Ventas alcanzadas de tiendas para encargado. Ventas sin IVA.</p></div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[7],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_STORESALESGOAL', 'value' => $result_data->PAYROLL_STORESALESGOAL, 'class' => 'form-control', 'type' => 'text') + $disabled)."</div><p class='help-block'>Meta de tiendas para encargado. Ventas sin IVA.</p></div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[8],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'><div class='input-group'><div class='input-group-addon'>Q.</div>".form_input(array('name' => 'PAYROLL_STORESALES', 'value' => $result_data->PAYROLL_STORESALES, 'class' => 'form-control', 'type' => 'text') + $disabled)."</div><p class='help-block'>Ventas alcanzadas de tiendas para encargado. Ventas sin IVA.</p></div></div>";
 		//Botones
 		$data_array['form_html']	.= '<div class="form-actions">';
-		$data_array['form_html']	.= form_submit(array('value' => $this->plugin_button_update, 'class' => 'btn btn-primary', 'name' => 'POST_SUBMIT')).' ';
-		$data_array['form_html']	.= form_submit(array('value' => $this->plugin_button_delete, 'class' => 'btn btn-danger', 'name' => 'POST_SUBMIT')).' ';
+		$data_array['form_html']	.= form_submit(array('value' => $this->plugin_button_update, 'class' => 'btn btn-primary', 'name' => 'POST_SUBMIT') + $disabled).' ';
+		$data_array['form_html']	.= form_submit(array('value' => $this->plugin_button_delete, 'class' => 'btn btn-danger', 'name' => 'POST_SUBMIT') + $disabled).' ';
 		$data_array['form_html']	.= anchor('cms/'.strtolower($this->current_plugin), $this->plugin_button_cancel, array('class'=>'btn btn-default')).' ';
 		$data_array['form_html']	.= anchor('cms/'.strtolower($this->current_plugin).'/email_payroll/'.$result_data->ID, "<span class='glyphicon glyphicon-envelope'></span> Enviar Planilla", array('class'=>'btn btn-default pull-right')).' ';
 		$data_array['form_html']	.= '</div>';
@@ -186,6 +197,7 @@ class Plugin_payrolls extends PL_Controller {
 		$form_posts 					= $this->input->post();
 		$employee_earned 				= $this->calculo_total_devengado($form_posts['PAYROLL_EMPLOYEE'], $form_posts['PAYROLL_INITIALDATE'], $form_posts['PAYROLL_ENDDATE'], $form_posts['PAYROLL_EXTRAHOURS'], $form_posts['PAYROLL_SALESGOAL'], $form_posts['PAYROLL_SALES'], $form_posts['PAYROLL_STORESALESGOAL'], $form_posts['PAYROLL_STORESALES'], $form_posts['PAYROLL_FESTIVEHOURS'], $form_posts['PAYROLL_SETTLEMENT'], $form_posts['PAYROLL_EXTRAINCOME'], $form_posts['PAYROLL_EXTRADISCOUNT']);
 		$form_posts['PAYROLL_EMAILSENT']= 'NO';
+		$form_posts['PAYROLL_CLOSE']	= 'NO';
 		
 		//Datos a enviar para nueva planilla
 		$submit_posts					= $this->form_posts($form_posts, $employee_earned); //Datos a enviar a la base de datos.
@@ -196,6 +208,7 @@ class Plugin_payrolls extends PL_Controller {
 		$form_posts 					= $this->input->post();
 		$employee_earned 				= $this->calculo_total_devengado($form_posts['PAYROLL_EMPLOYEE'], $form_posts['PAYROLL_INITIALDATE'], $form_posts['PAYROLL_ENDDATE'], $form_posts['PAYROLL_EXTRAHOURS'], $form_posts['PAYROLL_SALESGOAL'], $form_posts['PAYROLL_SALES'], $form_posts['PAYROLL_STORESALESGOAL'], $form_posts['PAYROLL_STORESALES'], $form_posts['PAYROLL_FESTIVEHOURS'], $form_posts['PAYROLL_SETTLEMENT'], $form_posts['PAYROLL_EXTRAINCOME'], $form_posts['PAYROLL_EXTRADISCOUNT']);
 		$form_posts['PAYROLL_EMAILSENT']= 'NO';
+		$form_posts['PAYROLL_CLOSE']	= 'NO';
 		
 		//Datos a enviar para nueva planilla
 		$submit_posts					= $this->form_posts($form_posts, $employee_earned, TRUE); //Datos a enviar a la base de datos.
@@ -253,6 +266,23 @@ class Plugin_payrolls extends PL_Controller {
 		
 		return $submit_posts;
 	 }
+	public function close_payroll_period(){
+		$form_posts				= $this->input->post();
+		$date					= $form_posts['YEAR'].'-'.$form_posts['MONTH'];
+		$initialdate			= $date.'-01'; //Fecha a iniciar
+		$enddate				= date('Y-m-d', strtotime("$date last day next month")); //Fecha a iniciar
+		
+		$where = "PAYROLL_ENDDATE BETWEEN '$initialdate' AND '$enddate'";
+		
+		
+		if($this->plugin_payrolls->update(array('PAYROLL_CLOSE' => $form_posts['CLOSE']), NULL, $where)): //Confirmar si existe el archivo de planilla.
+			$this->fw_alerts->add_new_alert(3001, 'SUCCESS');
+		else:
+			$this->fw_alerts->add_new_alert(3002, 'ERROR');
+		endif;
+		
+		redirect('cms/'.strtolower($this->current_plugin));
+	}
 	private function get_staff_list(){
 		$staff_list = $this->plugin_staff->list_rows('', '');
 		

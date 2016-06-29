@@ -53,7 +53,35 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6"></div>
+				<div class="col-lg-6 text-right">
+					<div class="row">
+						<div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+							<?php 
+							$date_component		= date_components();
+							
+							?>
+							<h6>Cierre de planilla - Mes abierto <?php echo $date_component['meses'][str_pad($open_month->OPEN_MONTH, 2, "0", STR_PAD_LEFT)].", ".$open_month->OPEN_YEAR?></h6>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+							<form method="post" action="<?php echo base_url('cms/plugin_payrolls/close_payroll_period')?>">
+								<?php echo form_hidden('CLOSE', 'NO');
+								echo form_hidden('MONTH', str_pad($closed_month->CLOSED_MONTH, 2, "0", STR_PAD_LEFT));
+								echo form_hidden('YEAR', $closed_month->CLOSED_YEAR);
+								echo form_submit('SUBMIT', 'Regresar Mes', 'class="btn btn-default"')?>
+							</form>
+						</div>
+						<div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+							<form method="post" action="<?php echo base_url('cms/plugin_payrolls/close_payroll_period')?>">
+								<?php echo form_hidden('CLOSE', 'SI');
+								echo form_hidden('MONTH', str_pad($open_month->OPEN_MONTH, 2, "0", STR_PAD_LEFT));
+								echo form_hidden('YEAR', $open_month->OPEN_YEAR);
+								echo form_submit('SUBMIT', 'Cerrar Mes', 'class="btn btn-info"')?>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 			</div>
 		</div>

@@ -319,7 +319,7 @@ class FW_posts {
 			//Establecer parámetros
 			$this->FW->email->from("contabilidad@grupoi5.com","Nómina ICINCO");
 			$this->FW->email->to($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'));
-			//$this->FW->email->cc($this->FW->fw_resource->request('RESOURCE_PAYROLL_SUBMANAGEREMAIL'));
+			$this->FW->email->cc($this->FW->fw_resource->request('RESOURCE_PAYROLL_SUBMANAGEREMAIL'));
 			$this->FW->email->attach($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planillageneral'.$payroll_file.'.pdf'));
 			
 			$this->FW->email->subject('Planilla total de '.$payroll_date);

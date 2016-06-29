@@ -88,4 +88,13 @@ class Cms_plugin_payrolls extends MY_Model {
 		
 		return $query->row();
 	  }
+	  /**
+	   * Obtener el último mes cerrado de planillas
+	   */
+	   public function last_closed_month(){
+	   	$query = $this->db->query("	SELECT MAX(ID) AS ID, month(PAYROLL_ENDDATE) AS PAYROLL_MONTH, year(PAYROLL_ENDDATE) AS PAYROLL_YEAR 
+	   								FROM PLUGIN_SALESMAN_PAYROLL
+	   								WHERE PAYROLL_ENDDATE IN (SELECT MAX(PAYROLL_ENDDATE) FROM PLUGIN_SALESMAN_PAYROLL WHERE PAYROLL_CLOSE = 'SI')");
+		return $query->row();
+	   }
 }
