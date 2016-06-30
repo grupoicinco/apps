@@ -303,7 +303,9 @@ class Plugin_payrolls extends PL_Controller {
 		$this->load->model('cms/cms_plugin_commissions', 'plugin_commissions');
 		
 		//Salario devengado
-		$initialworkdate			= ($employeedata->SALESMAN_COMMENCEMENT > $initialdate)?$employeedata->SALESMAN_COMMENCEMENT:$initialdate;
+		$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
+		$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);
+		$initialworkdate			= ($employeedata->SALESMAN_COMMENCEMENT > $initialdate)?$salesmancommen_dayprev:$initialdate;
 		$datetime1 					= new DateTime($initialworkdate);
 		$datetime2 					= new DateTime($enddate);
 		$interval 					= $datetime1->diff($datetime2);
@@ -388,7 +390,9 @@ class Plugin_payrolls extends PL_Controller {
 		$nextpayment				= (date('m') > $monthtopay)?((date('Y-') + 1).$monthtopay.'-01'):(date('Y-').$monthtopay.'-01');
 		
 		//Fecha de pago
-		$data['commencementdate']	= ($employeedata->SALESMAN_COMMENCEMENT > $lastpaymentmade)? $employeedata->SALESMAN_COMMENCEMENT: $lastpaymentmade; //Obtener fecha de inicio de labores o último pago de bono 14, dependiendo el caso.
+		$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
+		$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);
+		$data['commencementdate']	= ($employeedata->SALESMAN_COMMENCEMENT > $lastpaymentmade)? $salesmancommen_dayprev: $lastpaymentmade; //Obtener fecha de inicio de labores o último pago de bono 14, dependiendo el caso.
 		$firsdate 					= new DateTime($data['commencementdate']); //Fecha desde que inició el cálculo de bono 14
 		$seconddate 				= new DateTime($employeedata->PAYROLL_ENDDATE); //Fecha que finaliza el pago de planilla.
 		$interval 					= $firsdate->diff($seconddate);
@@ -544,7 +548,9 @@ class Plugin_payrolls extends PL_Controller {
 		//Obtener días tomados de vacaciones
 		$this->load->model('cms/cms_plugin_vacations', 'plugin_vacations');
 		$employeeid					= (isset($employeedata->PAYROLL_EMPLOYEE))?$employeedata->PAYROLL_EMPLOYEE:$employeedata->ID;
-		$vacationsTaken				= $this->plugin_vacations->list_rows('',"VACATIONS_EMPLOYEE = '".$employeeid."' AND VACATION_INITIALDATE BETWEEN '".$employeedata->SALESMAN_COMMENCEMENT."' AND '".date('Y-m-d')."'"); //Obtener las vacaciones tomadas por el empleado.
+		$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
+		$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);
+		$vacationsTaken				= $this->plugin_vacations->list_rows('',"VACATIONS_EMPLOYEE = '".$employeeid."' AND VACATION_INITIALDATE BETWEEN '".$salesmancommen_dayprev."' AND '".date('Y-m-d')."'"); //Obtener las vacaciones tomadas por el empleado.
 		$vacationdays				= array();
 		foreach($vacationsTaken as $vacations):
 			$restDays				= $this->countRestDays($vacations->VACATION_INITIALDATE, $vacations->VACATION_ENDDATE, $vacations->VACATION_RESTDAY); //Obtener la suma de los días de descanso en el período de vacaciones tomadas.
@@ -711,7 +717,9 @@ class Plugin_payrolls extends PL_Controller {
 			$indemnizacion				= FALSE;
 			
 			//Obtener tiempo trabajado
-			$initialdate				= new DateTime($employeedata->SALESMAN_COMMENCEMENT);
+			$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
+			$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);
+			$initialdate				= new DateTime($salesmancommen_dayprev);
 			$enddate					= new DateTime($payrolldata->PAYROLL_ENDDATE);
 			$interval					= $initialdate->diff($enddate);
 			$dayssincecommencement		= ($interval->format('%a') + 1); //Días transcurridos a la fecha desde el inicio de labores en la empresa del empleado. Se le asigna un dia mas para contar el de la fecha que inició.
