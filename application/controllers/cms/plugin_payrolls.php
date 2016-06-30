@@ -249,7 +249,8 @@ class Plugin_payrolls extends PL_Controller {
 	 	//Validar que la fecha final esté dentro del mes abierto.
 	 	$payroll_enddate				= date('Y-m', strtotime($form_posts['PAYROLL_ENDDATE']));
 		$return							= ($return != FALSE && $payroll_enddate > ($this->payroll_closedmonth->PAYROLL_YEAR.'-'.str_pad($this->payroll_closedmonth->PAYROLL_MONTH,2,0,STR_PAD_LEFT)) && $payroll_enddate <= ($this->payroll_openmonth->OPEN_YEAR.'-'.$this->payroll_openmonth->OPEN_MONTH))?TRUE:FALSE;
-		//Validar que el vendedor este disponible
+		//Validar que el vendedor este seleccionado
+		$return							= ($return != FALSE && !empty($form_posts['PAYROLL_EMPLOYEE']))?TRUE:FALSE;
 		
 		
 		return $return;
@@ -352,6 +353,7 @@ class Plugin_payrolls extends PL_Controller {
 		//Comisiones
 		$commissions 				= $this->plugin_commissions->list_rows('', 'SALESMAN_POSITION = "'.$employeedata->SALESMAN_POSITION.'"');
 		$store_salesgoal			= ($store_salesgoal < 1)?$store_salesreached:$store_salesgoal; //Colocar la meta lo vendido en caso el valor de meta sea cero o menor.
+		$sales_goal					= ($sales_goal < 1)?1:$sales_goal; //Colocar uno para evitar error en divisiones sobre cero.
 		$goalreached				= ($employeedata->SALESMAN_POSITION == 'ASESOR')?($salesreached / $sales_goal):($store_salesreached / $store_salesgoal); //Colocar la meta sobre venta personal o venta de tiendas.
 		foreach($commissions as $i => $commission):
 			if($goalreached >= $commission->COMMISSION_GOAL): //Si el valor de meta alcanzado es mayor al objetivo de comisión
