@@ -57,6 +57,7 @@ class FW_alerts {
 		$return_type[4011]					= $this->alert_type('ERROR');
 		$return_type[4012]					= $this->alert_type('SUCCESS');
 		$return_type[4013]					= $this->alert_type('SUCCESS');
+		$return_type[4014]					= $this->alert_type('ERROR');
 		
 		if(array_key_exists($key, $return_type)):
 			return $return_type[$key];

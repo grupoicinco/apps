@@ -28,6 +28,7 @@
 		$return_message[4011]				= "<h4>Error al cambiar datos</h4> Su informaci&oacute;n no ha podido ser actualizada exitosamente.";
 		$return_message[4012]				= "<h4>Datos Eliminados</h4> Su informaci&oacute;n ha sido eliminada exitosamente.";
 		$return_message[4013]				= "<h4>Datos Ingresados</h4> Su informaci&oacute;n ha sido ingresada exitosamente.";
+		$return_message[4014]				= "<h4>Registro Fallido</h4> El per&iacute;odo que intenta crear no est&aacute; abierto, aseg&uacute;rese de que la fecha final que ingresa este dentro del mes abierto.";
 		//STAGE notifications
 		$return_message[2020]				= "Esta orden ya se envío a aprobación al cliente y no puede ser modificada.";
 		

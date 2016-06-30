@@ -40,6 +40,7 @@ class Plugin_payrolls extends PL_Controller {
 		$this->plugin_display_array[11]		= "Descuento Adicional";
 		$this->plugin_display_array[12]		= "&iquest;Liquidar?";
 		
+		
 		$this->plugins_model->initialise($this->plugin_action_table);
 		$this->load->model('cms/cms_plugin_payrolls', 'plugin_payrolls');
 		
@@ -52,6 +53,13 @@ class Plugin_payrolls extends PL_Controller {
 		
 		//Obtener el profiler del plugin
 		$this->output->enable_profiler(FALSE);
+		
+		//Obtener mes cerrado y abierto para planillas
+		$this->payroll_closedmonth			= $this->plugin_payrolls->last_closed_month(); //Obtener el último mes cerrado
+		$close_date							= $this->payroll_closedmonth->PAYROLL_YEAR.'-'.$this->payroll_closedmonth->PAYROLL_MONTH; //Generar el mes cerrado en una variable
+		$open_year							= date('Y', strtotime("$close_date next month")); //Año abierta para planilla
+		$open_month							= date('m', strtotime("$close_date next month")); //Mes abierta para planilla
+		$this->payroll_openmonth			= (object) array('OPEN_MONTH' => $open_month, 'OPEN_YEAR' => $open_year); //Enviar el mes abierto
 		
 		//Modelos extra a obtener
 		$this->load->model('cms/cms_plugin_staff', 'plugin_staff');
@@ -195,29 +203,57 @@ class Plugin_payrolls extends PL_Controller {
 	//Funciones de los posts a enviar
 	public function post_new_val(){
 		$form_posts 					= $this->input->post();
-		$employee_earned 				= $this->calculo_total_devengado($form_posts['PAYROLL_EMPLOYEE'], $form_posts['PAYROLL_INITIALDATE'], $form_posts['PAYROLL_ENDDATE'], $form_posts['PAYROLL_EXTRAHOURS'], $form_posts['PAYROLL_SALESGOAL'], $form_posts['PAYROLL_SALES'], $form_posts['PAYROLL_STORESALESGOAL'], $form_posts['PAYROLL_STORESALES'], $form_posts['PAYROLL_FESTIVEHOURS'], $form_posts['PAYROLL_SETTLEMENT'], $form_posts['PAYROLL_EXTRAINCOME'], $form_posts['PAYROLL_EXTRADISCOUNT']);
 		$form_posts['PAYROLL_EMAILSENT']= 'NO';
-		$form_posts['PAYROLL_CLOSE']	= 'NO';
 		
-		//Datos a enviar para nueva planilla
-		$submit_posts					= $this->form_posts($form_posts, $employee_earned); //Datos a enviar a la base de datos.
+		//Validar el formulario
+		$valid							= $this->submit_validation($form_posts);
 		
-		return $this->_set_new_val($submit_posts);
+		if($valid):
+			//Obtener el calculo devengado
+			$employee_earned 				= $this->calculo_total_devengado($form_posts['PAYROLL_EMPLOYEE'], $form_posts['PAYROLL_INITIALDATE'], $form_posts['PAYROLL_ENDDATE'], $form_posts['PAYROLL_EXTRAHOURS'], $form_posts['PAYROLL_SALESGOAL'], $form_posts['PAYROLL_SALES'], $form_posts['PAYROLL_STORESALESGOAL'], $form_posts['PAYROLL_STORESALES'], $form_posts['PAYROLL_FESTIVEHOURS'], $form_posts['PAYROLL_SETTLEMENT'], $form_posts['PAYROLL_EXTRAINCOME'], $form_posts['PAYROLL_EXTRADISCOUNT']);
+			//Datos a enviar para nueva planilla
+			$submit_posts					= $this->form_posts($form_posts, $employee_earned); //Datos a enviar a la base de datos.
+			return $this->_set_new_val($submit_posts);
+		else:
+			$this->fw_alerts->add_new_alert(4014, 'ERROR');
+            redirect('cms/'.strtolower($this->current_plugin));			
+		endif;
 	}
 	public function post_update_val($data_id){
 		$form_posts 					= $this->input->post();
-		$employee_earned 				= $this->calculo_total_devengado($form_posts['PAYROLL_EMPLOYEE'], $form_posts['PAYROLL_INITIALDATE'], $form_posts['PAYROLL_ENDDATE'], $form_posts['PAYROLL_EXTRAHOURS'], $form_posts['PAYROLL_SALESGOAL'], $form_posts['PAYROLL_SALES'], $form_posts['PAYROLL_STORESALESGOAL'], $form_posts['PAYROLL_STORESALES'], $form_posts['PAYROLL_FESTIVEHOURS'], $form_posts['PAYROLL_SETTLEMENT'], $form_posts['PAYROLL_EXTRAINCOME'], $form_posts['PAYROLL_EXTRADISCOUNT']);
 		$form_posts['PAYROLL_EMAILSENT']= 'NO';
-		$form_posts['PAYROLL_CLOSE']	= 'NO';
 		
-		//Datos a enviar para nueva planilla
-		$submit_posts					= $this->form_posts($form_posts, $employee_earned, TRUE); //Datos a enviar a la base de datos.
+		//Validar el formulario
+		$valid							= $this->submit_validation($form_posts);
 		
-		return $this->_set_update_val($submit_posts);
+		if($valid):
+			$employee_earned 				= $this->calculo_total_devengado($form_posts['PAYROLL_EMPLOYEE'], $form_posts['PAYROLL_INITIALDATE'], $form_posts['PAYROLL_ENDDATE'], $form_posts['PAYROLL_EXTRAHOURS'], $form_posts['PAYROLL_SALESGOAL'], $form_posts['PAYROLL_SALES'], $form_posts['PAYROLL_STORESALESGOAL'], $form_posts['PAYROLL_STORESALES'], $form_posts['PAYROLL_FESTIVEHOURS'], $form_posts['PAYROLL_SETTLEMENT'], $form_posts['PAYROLL_EXTRAINCOME'], $form_posts['PAYROLL_EXTRADISCOUNT']);
+			//Datos a enviar para nueva planilla
+			$submit_posts					= $this->form_posts($form_posts, $employee_earned, TRUE); //Datos a enviar a la base de datos.
+			return $this->_set_update_val($submit_posts);
+		else:
+			$this->fw_alerts->add_new_alert(4014, 'ERROR');
+            redirect('cms/'.strtolower($this->current_plugin));			
+		endif;
 	}
 	/*
 	 * Funciones específicas del plugin
 	 */
+	 
+	 /**
+	  * Función para devolver si es válido el formulario
+	  * @var $form_posts - Datos a validar enviados en el formulario.
+	  */
+	 private function submit_validation($form_posts){
+	 	$return 						= TRUE; //Devolver como true si todo está bien.
+	 	//Validar que la fecha final esté dentro del mes abierto.
+	 	$payroll_enddate				= date('Y-m', strtotime($form_posts['PAYROLL_ENDDATE']));
+		$return							= ($return != FALSE && $payroll_enddate > ($this->payroll_closedmonth->PAYROLL_YEAR.'-'.str_pad($this->payroll_closedmonth->PAYROLL_MONTH,2,0,STR_PAD_LEFT)) && $payroll_enddate <= ($this->payroll_openmonth->OPEN_YEAR.'-'.$this->payroll_openmonth->OPEN_MONTH))?TRUE:FALSE;
+		//Validar que el vendedor este disponible
+		
+		
+		return $return;
+	 }
 	 
 	 /**
 	  * Función para obtener los datos del formulario
@@ -259,7 +295,8 @@ class Plugin_payrolls extends PL_Controller {
 		$submit_posts['PAYROLL_ESTABLISHEDBONUS'] 	= number_format($employee_earned['earned_salary'][6], 2, '.', '');
 		$submit_posts['PAYROLL_TOTALDISCOUNTS']		= number_format(array_sum($employee_earned['discount_salary']), 2, '.', '');
 		$submit_posts['PAYROLL_SETTLEMENT']			= $form_posts['PAYROLL_SETTLEMENT'];
-		//Actualizar datos de empleado
+		$submit_posts['PAYROLL_CLOSE']				= 'NO';
+		//Actualizar datos de empleado	
 		$salesman_enabled							= ($form_posts['PAYROLL_SETTLEMENT'] == 'NO')?'SI':'NO'; //Si se selecciona liquidar al empleado, se inhabilitará en la tabla de empleados.
 		$staff_data['SALESMAN_ENABLED']				= $salesman_enabled;
 		$this->plugin_staff->update($staff_data, $form_posts['PAYROLL_EMPLOYEE']);
