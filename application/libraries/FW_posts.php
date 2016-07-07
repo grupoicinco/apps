@@ -232,15 +232,16 @@ class FW_posts {
 	 	
 		if(!empty($payroll_data)):
 			//Establecer parámetros
-			$this->FW->email->from("contabilidad@grupoi5.com","Nómina ICINCO");
+			$this->FW->email->from($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'),"Nómina ICINCO");
 			$this->FW->email->to($payroll_data->SALESMAN_EMAIL); 
 			$this->FW->email->cc($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'));
 			$this->FW->email->attach($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payroll_data->ID.'.pdf'));
 			
 			$initialdate 	= mysql_date_to_dmy($payroll_data->PAYROLL_INITIALDATE);
 			$enddate	 	= mysql_date_to_dmy($payroll_data->PAYROLL_ENDDATE);
+			$total_payed	= $payroll_data->PAYROLL_TOTALACCRUED + $payroll_data->PAYROLL_TOTALDISCOUNTS;
 			
-			$this->FW->email->subject('Planilla correspondiente del '.$initialdate.' al '.$enddate);
+			$this->FW->email->subject('Planilla de '.iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payroll_data->SALESMAN_NAME." ".$payroll_data->SALESMAN_LASTNAME))).' correspondiente del '.$initialdate.' al '.$enddate);
 			$html_body = array(
 							array(
 								'LABEL' 	=> NULL,
@@ -260,11 +261,11 @@ class FW_posts {
 							),
 							array(
 								'LABEL' 	=> 'Neto pagado',
-								'POSTVAL'	=> "Q. ".number_format(($payroll_data->PAYROLL_TOTALACCRUED + $payroll_data->PAYROLL_TOTALDISCOUNTS),2,".",",")
+								'POSTVAL'	=> "Q. ".number_format($total_payed,2,".",",")
 							)
 						);
 			$html_message = $this->_icinco_html_template($this->current_website, $html_body, $this->company, $this->tel, $this->contact_email);
-			//$this->FW->email->message($html_message);
+			$this->FW->email->message($html_message);
 			return $this->FW->email->send();
 		else:
 			return FALSE;

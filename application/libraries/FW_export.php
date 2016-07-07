@@ -403,7 +403,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell(0, 5, "Planilla de salarios", 0, 0, "C");
 		
 		$pdf->SetFont('Arial','',9);
-		$pdf->Ln(10);
+		$pdf->Ln(7);
 		
 		//Información general de planilla
 		$pdf->Cell(40,10,'Salario Nominal:',0,0);
@@ -416,7 +416,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		
 		//Información del empleado
 		$pdf->Cell(40,10,'Empleado:',0,0);
-		$pdf->Cell(40,10,"$payrolls->SALESMAN_SAC_CODE - $payrolls->SALESMAN_NAME $payrolls->SALESMAN_LASTNAME",0,0);
+		$pdf->Cell(40,10,"$payrolls->SALESMAN_SAC_CODE - ".iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->SALESMAN_NAME." ".$payrolls->SALESMAN_LASTNAME))),0,0);
 		$pdf->Ln(4);
 		$pdf->Cell(40,10,'Cargo:',0,0);
 		$pdf->Cell(40,10,$payrolls->SALESMAN_POSITION,0,0);
@@ -451,12 +451,12 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell(60, 6, "Horas Extra:", "L", 0);
 		$pdf->Cell(30, 6, "Q. ".($payrolls->PAYROLL_EXTRAHOURSSALARY + $payrolls->PAYROLL_FESTIVEHOURSSALARY), "R", 0, "R");
 		$pdf->Cell(10, 6, NULL, 0, 0);
-		if($payrolls->PAYROLL_EXTRADISCOUNT > 0 || $payrolls->PAYROLL_EXTRAINCOME > 0):
+		if($payrolls->PAYROLL_EXTRADISCOUNT != 0 || $payrolls->PAYROLL_EXTRAINCOME != 0):
 		$payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION = (empty($payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION))?"Otros":$payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION;
 		$payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION = (empty($payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION))?"Otros":$payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION;
-		$pdf->Cell(60, 6, "$payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION:", "L", 0);
+		$pdf->Cell(60, 6, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION))).":", "L", 0);
 		$pdf->Cell(30, 6, "Q. $payrolls->PAYROLL_EXTRADISCOUNT", "R", 1, "R");
-		$pdf->Cell(60, 6, "$payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION:", "L", 0);
+		$pdf->Cell(60, 6, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION))).":", "L", 0);
 		$pdf->Cell(30, 6, "Q. $payrolls->PAYROLL_EXTRAINCOME", "R", 0, "R");
 		$pdf->Cell(10, 6, NULL, 0, 0);
 		endif;
@@ -483,6 +483,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 	
 	$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payrolls->ID.'.pdf');
 	return $pdf->Output($filename,'F');
+	
 }
 	/**
 	 * Función de finiquito de planilla en pdf.
