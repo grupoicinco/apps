@@ -378,10 +378,8 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Output();
 	 }
 	//PDF Planillas
-	public function pdfpayroll($id){
+	public function pdfpayroll($payrolls, $bono14){
 		
-		$this->FW->load->model('cms/cms_plugin_payrolls', 'plugin_payrolls');
-		$payrolls			= $this->FW->plugin_payrolls->get_payroll($id);
 		
 		list($iniy, $inim, $inid) = explode("-", $payrolls->PAYROLL_INITIALDATE); //Obtener dia mes y año separado de la fecha de inicio
 		list($endy, $endm, $endd) = explode("-", $payrolls->PAYROLL_ENDDATE);//Obtener dia mes y año separado de la fecha final
@@ -458,6 +456,14 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell(30, 6, "Q. $payrolls->PAYROLL_EXTRADISCOUNT", "R", 1, "R");
 		$pdf->Cell(60, 6, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION))).":", "L", 0);
 		$pdf->Cell(30, 6, "Q. $payrolls->PAYROLL_EXTRAINCOME", "R", 0, "R");
+		$pdf->Cell(10, 6, NULL, 0, 0);
+		endif;
+		//Si es julio, enviar pago de Bono 14
+		if($endm == '07'):
+		$pdf->Cell(60, 6, "Bono 14 pagado:", "L", 0);
+		$pdf->Cell(30, 6, "Q. -".number_format($bono14['total14bonus'], 2), "R", 1, "R");
+		$pdf->Cell(60, 6, "Bono 14:", "L", 0);
+		$pdf->Cell(30, 6, "Q. ".number_format($bono14['total14bonus'], 2), "R", 0, "R");
 		$pdf->Cell(10, 6, NULL, 0, 0);
 		endif;
 		$payrolls->PAYROLL_TOTALDISCOUNT = ($payrolls->PAYROLL_TOTALDISCOUNTS + $quincena); //Agregar el pago de quincena al total descontado.

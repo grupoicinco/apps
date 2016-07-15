@@ -426,14 +426,17 @@ class Plugin_payrolls extends PL_Controller {
 		$payedbonusyear				= (date('m') > $monthtopay)?date('Y'):(date('Y')-1);
 		$lastpaymentmade			= $payedbonusyear.'-'.$monthtopay.'-01'; //Fecha del último pago de bono 14 realizado.
 		$bonusdate					= (date('Y-').$monthtopay.'-01'); //Fecha de pago de bono14
-		$nextpayment				= (date('m') > $monthtopay)?((date('Y-') + 1).$monthtopay.'-01'):(date('Y-').$monthtopay.'-01');
+		$nextpayment				= (date('m') > $monthtopay)?((date('Y') + 1).'-'.$monthtopay.'-01'):(date('Y-').$monthtopay.'-01');
+		list($endy, $endm, $endd) 	= explode("-", $employeedata->PAYROLL_ENDDATE);//Obtener dia mes y año separado de la fecha final
+		$paymentenddate 			= ($endm == $monthtopay)?$endy.'-'.str_pad($endm - 1, 2, 0, STR_PAD_LEFT).'-'.$endd:$employeedata->PAYROLL_ENDDATE; //Colocar el mes anterior como fecha final, en caso el mes final de planilla sea el mes a pagar bono.
+		
 		
 		//Fecha de pago
 		$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
 		$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);
 		$data['commencementdate']	= ($employeedata->SALESMAN_COMMENCEMENT > $lastpaymentmade)? $salesmancommen_dayprev: $lastpaymentmade; //Obtener fecha de inicio de labores o último pago de bono 14, dependiendo el caso.
 		$firsdate 					= new DateTime($data['commencementdate']); //Fecha desde que inició el cálculo de bono 14
-		$seconddate 				= new DateTime($employeedata->PAYROLL_ENDDATE); //Fecha que finaliza el pago de planilla.
+		$seconddate 				= new DateTime($paymentenddate); //Fecha que finaliza el pago de planilla.
 		$interval 					= $firsdate->diff($seconddate);
 		$dayssalarypaid				= $interval->format('%a');//Calcular el total de días pendiente de pago
 		$data['dayssalarypaid']		= ($dayssalarypaid > 365)?365:$dayssalarypaid; //No contar los días extra de julio.
@@ -442,20 +445,26 @@ class Plugin_payrolls extends PL_Controller {
 		$payrollenddate 			= strtotime ( '-1 day' , strtotime ( $employeedata->PAYROLL_ENDDATE ) ) ;
 		$previousSavings			= date ( 'Y-m-d' , $payrollenddate);
 		$employeedata->PAYROLL_EMPLOYEE = (!isset($employeedata->PAYROLL_EMPLOYEE))?$employeedata->ID:$employeedata->PAYROLL_EMPLOYEE; //En caso no se envíe según información de planilla, sino únicamente de empleado.
-		$employeePayrolls			= $this->plugin_payrolls->list_rows('PAYROLL_COMMISSION, PAYROLL_SALARYPAID', 'PAYROLL_EMPLOYEE = "'.$employeedata->PAYROLL_EMPLOYEE.'" AND PAYROLL_ENDDATE BETWEEN "'.$lastpaymentmade.'" AND "'.$previousSavings.'"');
+		$employeePayrolls			= $this->plugin_payrolls->list_rows('PAYROLL_COMMISSION, PAYROLL_SALARYPAID', 'PAYROLL_EMPLOYEE = "'.$employeedata->PAYROLL_EMPLOYEE.'" AND PAYROLL_ENDDATE BETWEEN "'.$data['commencementdate'].'" AND "'.$previousSavings.'"');
 		$yearCommissions			= array();
 		$yearSalary					= array();
 		foreach($employeePayrolls as $commissions):
-			$yearCommissions[]		= $commissions->PAYROLL_COMMISSION; //Guardar las comisiones en un array
-			$yearSalary[]			= $commissions->PAYROLL_SALARYPAID;
+			$yearCommissions[]		= $commissions->PAYROLL_COMMISSION; //Guardar las comisiones en un array.
+			$yearSalary[]			= $commissions->PAYROLL_SALARYPAID; //Guardar los salarios pagados en un array.
 		endforeach;
 		$monthlyavecommission		= array_sum($yearCommissions); //Comisiones promedio de seis meses
 		$monthlyavesalary			= (array_sum($yearSalary) + $salariodevengadobono); //Salario total en un mes promedio.Sumando el salario del mes en curso mas los anteriores. 
 		$data['totalreceivedmonthly']= (($monthlyavesalary + $monthlyavecommission) / $data['dayssalarypaid']) * 30; //Total recibido en un mes promedio
+		/*
+		echo "<pre>";
+		print_r($data);
+		print_r($yearSalary);
+		print_r($yearCommissions);
+		echo "</pre>";*/
 		
 		return $data;
 	}
-	private function bono14($employeedata, $salariodevengadobono){
+	private function bono14($employeedata, $salariodevengadobono = 0){
 		
 		$bonusinfo					= $this->bonus($employeedata, 7, $salariodevengadobono);
 		
@@ -725,8 +734,12 @@ class Plugin_payrolls extends PL_Controller {
 	 */
 	 public function payroll_pdf($payrollid = NULL){
 	  	$this->load->library('FW_export', $payrollid);
+		$this->load->model('cms/cms_plugin_payrolls', 'plugin_payrolls');
+		$payrolls = $this->plugin_payrolls->get_payroll($payrollid);
 		
-		return $pdf = $this->fw_export->pdfpayroll($payrollid);
+		$bono14		= $this->bono14($payrolls);
+		
+		return $pdf = $this->fw_export->pdfpayroll($payrolls, $bono14);
 	 }
 	/**
 	 * Función para enviar datos de la planilla por correo
@@ -734,7 +747,7 @@ class Plugin_payrolls extends PL_Controller {
 	public function email_payroll($payrollid = NULL){
 		
 		$payrolldata		= $this->plugin_payrolls->get_payroll($payrollid); //Obtener datos de la planilla.
-		$this->fw_export->pdfpayroll($payrollid);
+		$this->payroll_pdf($payrollid);
 		
 		if($payrolldata->PAYROLL_SETTLEMENT == 'NO'): 
 			//Si no es liquidación del empleado	
