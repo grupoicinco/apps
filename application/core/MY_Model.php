@@ -111,9 +111,10 @@
 		/**
 		 * Devuelve un conjunto de filas de la tabla
 		 * @param $columns - string con los nombres de las columnas que se quieren obtener, separadas por comas
+		 * @param $where - condiciones para aplicar a la consulta
 		 * @param $limit - cantidad de rows que se quieren obtener
 		 * @param $offset - # de fila inicial que se quiere obtener
-		 * @param $where - condiciones para aplicar a la consulta
+		 * @param $orderby - orden de los resultados
 		 * @param $table - especificar tabla a requerir datos 
 		 */
 		public function list_rows($columns = '', $where = '', $limit = NULL, $offset = NULL, $orderby = '', $table = NULL) {

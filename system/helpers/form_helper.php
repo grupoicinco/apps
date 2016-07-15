@@ -301,11 +301,12 @@ if ( ! function_exists('form_multiselect'))
  * @param	array
  * @param	string
  * @param	string
+ * @param	array
  * @return	string
  */
 if ( ! function_exists('form_dropdown'))
 {
-	function form_dropdown($name = '', $options = array(), $selected = array(), $extra = '')
+	function form_dropdown($name = '', $options = array(), $selected = array(), $extra = '', $disabledoption = array())
 	{
 		if ( ! is_array($selected))
 		{
@@ -348,8 +349,9 @@ if ( ! function_exists('form_dropdown'))
 			else
 			{
 				$sel = (in_array($key, $selected)) ? ' selected="selected"' : '';
+				$dis = (!empty($disabledoption) && in_array($key, $disabledoption))? ' disabled': '';
 
-				$form .= '<option value="'.$key.'"'.$sel.'>'.(string) $val."</option>\n";
+				$form .= '<option value="'.$key.'"'.$sel.$dis.'>'.(string) $val."</option>\n";
 			}
 		}
 

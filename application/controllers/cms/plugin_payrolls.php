@@ -135,14 +135,15 @@ class Plugin_payrolls extends PL_Controller {
 	 */
 	public function _html_plugin_create(){
 		
-		$employees					= $this->get_staff_list();
+		$employees					= $this->get_staff_list()->complete;
 		$employees					= array('' => 'Seleccionar empleado') + $employees; //Añadir campo en blanco
+		$disabled					= $this->get_staff_list()->disabled;
 		$liquidacion				= array('NO' => 'No', 'SI' => 'Si - Sin indemnizaci&oacute;n', 'INDEMNIZAR' => 'Si - Con indemnizaci&oacute;n');
 		
 		$data_array['form_html']	= form_open_multipart('cms/'.strtolower($this->current_plugin).'/post_new_val', array('class' => 'form-horizontal col-lg-9', 'role' => 'form'));
 		$data_array['form_html']	.=  "<div class='row'><div class='col-lg-12 col-md-12 col-sm-12'>".validation_errors()."</div></div>";
 		//Formulario
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[1],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_EMPLOYEE', $employees,'', 'class="form-control" id="PAYROLL_EMPLOYEE"')."</div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[1],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_EMPLOYEE', $employees,'', 'class="form-control" id="PAYROLL_EMPLOYEE"', $disabled)."</div></div>";
 		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[2],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_INITIALDATE', 'id' => 'PAYROLL_INITIALDATE', 'class' => 'form-control', 'data-date-format' => 'YYYY-MM-DD', 'readonly' => 'readonly'))."<p class='help-block'>Fecha inicial para contabilizar dias laborados en pago planilla.</p></div></div>";
 		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[3],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_ENDDATE', 'class' => 'datetimepicker form-control', 'data-date-format' => 'YYYY-MM-DD'))."<p class='help-block'>Fecha final para contabilizar en pago de planilla.</p></div></div>";
 		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[12],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_SETTLEMENT', $liquidacion,'', 'class="form-control" id="PAYROLL_SETTLEMENT"')."<p class='help-block'>Seleccionar si es la planilla de liquidaci&oacute;n de empleado. En caso haya que liquidar, seleccionar si se pagar&aacute; indemnizaci&oacute;n o no.</p></div></div>";
@@ -321,11 +322,21 @@ class Plugin_payrolls extends PL_Controller {
 		
 		redirect('cms/'.strtolower($this->current_plugin));
 	}
+	/**
+	 * Listado completo de empleados
+	 */
 	private function get_staff_list(){
 		$staff_list = $this->plugin_staff->list_rows('', '');
 		
+		$employees = (object) array('complete' => array(), 'disabled' => array());
+		
 		foreach($staff_list as $id => $employee):
-			$employees[$employee->ID] = $employee->SALESMAN_NAME.' '.$employee->SALESMAN_LASTNAME;
+			$employees->complete[$employee->ID] = $employee->SALESMAN_NAME.' '.$employee->SALESMAN_LASTNAME; //Guardar todos los empleados en el objecto "complete" en un array.
+			
+			if($employee->SALESMAN_ENABLED == 'NO'):
+				$employees->disabled[] = $employee->ID;
+			endif;
+			
 		endforeach;
 		
 		return $employees;
