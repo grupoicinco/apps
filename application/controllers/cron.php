@@ -47,4 +47,27 @@ class Cron extends CI_Controller {
 		echo "</pre>";*/
 		$this->fw_posts->delayed_orders($order_array);
 	}
+	/**
+	 * Función para enviar encuensta de servicio
+	 */
+	 public function service_poll(){
+	 	//Días después de finalizado el proceso para enviar las encuestas.
+	 	$finisheddays		= array(2, 7, 15, 30);
+	 	end($finisheddays);         // move the internal pointer to the end of the array
+	 	$key = key($finisheddays);
+		//Obtener los reclamos finalizados.
+		$process_finished		= "";
+		foreach($finisheddays as $i => $initialday):
+			$or					= ($i == $key)? "": "OR ";
+			$initialdate		= strtotime('-'.$initialday.' days', strtotime(date('Y-m-d'))); //Obtener fecha de días atrás en array $finisheddays
+			$initialdate		= date('Y-m-d',$initialdate);//Generar la fecha Y-m-d de los días atrás.
+			$process_finished 	.= "PROCESS_FINISHED = '$initialdate' $or";
+		endforeach;
+			$where				= "($process_finished) AND PROCESS_APPROVED = 'SI' AND PROCESS_PASSCODE IS NOT NULL AND RECLAIM_SERVICE_POLL_SENT = 'NO'";
+			$reclaims			= $this->plugin_reclamos->list_rows('', $where);
+		
+		foreach($reclaims as $i => $reclaim):
+			$this->fw_posts->service_poll($reclaim);
+		endforeach;
+	 }
 }

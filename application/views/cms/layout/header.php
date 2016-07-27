@@ -38,6 +38,7 @@
 	<script src="<?php echo base_url('library/cms/js/instafeed.min.js')?>"></script>
 	<script src="<?php echo base_url('library/cms/js/slick.min.js')?>"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
 
 	<script type="text/javascript">
 	$(function(){

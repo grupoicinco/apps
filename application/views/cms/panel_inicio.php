@@ -1,3 +1,28 @@
+<script type='text/javascript'>
+google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Recomen', <?=$pollresults->POLL_RECOMMENDATION?>],
+          ['Satisfa', <?=$pollresults->POLL_SATISFACTION?>],
+          ['Comunica', <?=$pollresults->POLL_INFO?>]
+        ]);
+
+        var options = {
+          width: 400, height: 120,
+          greenFrom: 80, greenTo: 100,
+          yellowFrom:20, yellowTo: 80,
+          redFrom: 0, redTo: 20,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+</script>
 <div id="content" class="container-fluid">
 	<div class="page-header">
 		<h1>TUMI <small>Asistente administrativo.</small></h1>
@@ -30,9 +55,8 @@
 			</table>
 		</div>
 		<div class="col-lg-5 widget">
-			<a href="#" class="thumbnail">
-				<iframe src="http://snapwidget.com/sl/?u=dHVtaXRyYXZlbHxpbnwzNTB8M3wzfHxub3w1fG5vbmV8b25TdGFydHx5ZXN8bm8=&ve=090914" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:380px; height:375px;"></iframe>
-			</a>
+			<h5>Encuesta de Servicio</h5>
+			<div id='chart_div' style='width: 100%; height: 120px;'></div>
 		</div>
 		
 	</div>

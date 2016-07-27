@@ -17,11 +17,16 @@ class FW_layout_data {
 	public function header_data(){
 		$data['external_files'] = array(
 									load_external_file('bootstrap.min.css', 'css'),
+									load_external_file('bootstrap-theme.css', 'css'),
 									load_external_file('font-awesome.min.css', 'css'),
 									load_external_file('bootstrap-addons.css', 'css'),
+									load_external_file('tumi.css', 'css'),
 									
-									load_external_file('//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js', 'js', false),
-									load_external_file('bootstrap.min.js', 'js')
+									load_external_file('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js', 'js', false),
+									load_external_file('bootstrap.min.js', 'js'),
+									load_external_file('https://www.google.com/recaptcha/api.js', 'js', FALSE)
+									
+									
 									);
 		return $data;
 	}

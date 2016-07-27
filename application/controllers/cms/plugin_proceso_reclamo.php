@@ -241,6 +241,7 @@ class Plugin_proceso_reclamo extends PL_Controller {
 			$submit_posts['PROCESS_PASSCODE']	= NULL;
 		elseif($this->input->post('PROCESS_STAGE') == 'FINALIZADO'):
 			$submit_posts['PROCESS_STAGE']		= 'ENTREGA';
+			$submit_posts['PROCESS_PASSCODE'] 	= md5(uniqid("R-".str_pad($data_id, 5, "0", STR_PAD_LEFT), true).date('Ymd'));		
 		else:
 			if ($this->form_validation->run('RECLAIM_PROCESS') != FALSE):
 				
@@ -317,7 +318,7 @@ class Plugin_proceso_reclamo extends PL_Controller {
 		$update_data	= array(
 							'PROCESS_STAGE'							=> 'ENTREGA',
 							'PROCESS_APPROVED'						=> 'SI',
-							'PROCESS_PASSCODE'						=> NULL,
+							'PROCESS_PASSCODE'						=> md5(uniqid("R-".str_pad($order['order'], 5, "0", STR_PAD_LEFT), true).date('Ymd')),
 							'PROCESS_FINISHED'						=> date('Y-m-d')
 						);
 		

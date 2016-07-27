@@ -178,6 +178,36 @@ class FW_posts {
 			return FALSE;
 		endif;
 	}
+	/**
+	 * Enviar correo de solicitud de rellenar encuesta de servicio.
+	 * @var array $orderdata - Array con la información del reclamo
+	 * @var string $passcode - Código a validar para responder encuesta.
+	 */
+	public function service_poll($orderdata = array()){
+		
+		if(!empty($orderdata)):
+			//Establecer parámetros
+			$this->FW->email->from('servicio@tumi.com.gt');
+			$this->FW->email->to($orderdata->RECLAIM_CLIENT_EMAIL);
+				
+			$this->FW->email->subject('Evalúa el servicio TUMI');
+			$html_body = array(
+							array(
+								'LABEL' 	=> NULL,
+								'POSTVAL'	=> 'Ay&uacute;danos a conocer como fu&eacute; tu experiencia con el servicio brindado por nuestros asesores TUMI en tu reclamo n&uacute;mero R-'.str_pad($orderdata->ID, 5, "0", STR_PAD_LEFT).', llenando una encuesta de 3 preguntas de selecci&oacute;n m&uacute;ltiple que toma un m&aacute;ximo de 3 minutos.<br /> La encuesta podr&aacute;s encontrarla presionando el boton siguiente:'
+							),
+							array(
+								'LABEL' 	=> NULL,
+								'POSTVAL'	=> '<a href="'.base_url('garantias/encuesta_servicio/'.$orderdata->PROCESS_PASSCODE.'/'.$orderdata->ID).'" style="border:1px solid #DBDBDB; float:left; display:block; width:50%; height:40px; line-height:40px; text-decoration:none; color:#222; text-align:center; border-radius:5px; cursor:pointer;">Ir a encuesta</a>'
+							)
+						);
+			$html_message = $this->_mailchimp_html_template($this->current_website, $html_body, $this->company, $this->tel, $this->contact_email);
+			$this->FW->email->message($html_message);
+			return $this->FW->email->send();
+		else:
+			return FALSE;
+		endif;
+	}
 	//Enviar correo de recordatorio de ordenes atrasadas.
 	public function delayed_orders($reclaims){
 		

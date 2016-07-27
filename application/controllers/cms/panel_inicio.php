@@ -16,9 +16,11 @@ class Panel_inicio extends MY_Controller {
 		$this->analytics_account_number		= 0;
 	}
 	public function index(){
+		$this->load->model('plugins/garantias_model', 'garantias_model');
 		
 		//Listado de reclamos;
-		$data['reclaims']	= $this->OpenReclaimsList(10);
+		$data['reclaims']		= $this->OpenReclaimsList(10);
+		$data['pollresults']	= $this->garantias_model->poll_results();
 		
 		$this->load->templatecms('cms/panel_inicio', $data);
 	}

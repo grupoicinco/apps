@@ -645,7 +645,7 @@ if ( ! function_exists('form_prep'))
 			return $str;
 		}
 
-//		$str = htmlspecialchars($str); //Change special characters to html
+		$str = ascii_to_entities($str); //Change special characters to html
 
 
 		// In case htmlspecialchars misses these.
