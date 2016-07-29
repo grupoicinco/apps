@@ -99,6 +99,39 @@ class FW_posts {
 			$this->FW->email->send();
 		endif;
 	}
+	/**
+	 * Enviar correo con información de upgrade
+	 * 
+	 */
+	public function send_upgrade_info($data, $id){
+			//Establecer parámetros
+			$this->FW->email->from('servicio@tumi.com.gt','Reclamos TUMI Guatemala');
+			$this->FW->email->to($this->FW->fw_resource->request('RESOURCE_PAYROLL_MANAGEREMAIL'));
+			$this->FW->email->cc(array('cayala@tumi.com.gt','oakland@tumi.com.gt', 'guido.orellana@grupoi5.com'));
+			
+			$this->FW->email->subject('Orden R-'.str_pad($id, 5, "0", STR_PAD_LEFT).' se le realizó cambio de producto.');
+			$html_body = array(
+							array(
+								'LABEL' 	=> 'Orden:',
+								'POSTVAL'	=> 'R-'.str_pad($id, 5, "0", STR_PAD_LEFT)
+							),
+							array(
+								'LABEL' 	=> "Factura:",
+								'POSTVAL'	=> $data['PROCESS_UPGRADE_RECEIPT_SERIES'].' '.$data['PROCESS_UPGRADE_RECEIPT_NUMBER']
+							),
+							array(
+								'LABEL'		=> "Producto entregado:",
+								'POSTVAL'	=> $data['PROCESS_UPGRADE_PRODUCT_CODE'].' '.$data['PROCESS_UPGRADE_PRODUCT_DESCRIPTION']
+							),
+							array(
+								'LABEL'		=> "Crédito:",
+								'POSTVAL'	=> "US$. ".number_format($data['PROCESS_UPGRADE_DISCOUNT'], 2)
+							)
+						);
+			$html_message = $this->_mailchimp_html_template($this->current_website, $html_body, $this->company, $this->tel, $this->contact_email);
+			$this->FW->email->message($html_message);
+			$this->FW->email->send();
+	}
 	//Enviar correo denegando proceso de reclamo
 	public function send_denied_process($to, $passcode){
 		if($this->FW->input->post()):

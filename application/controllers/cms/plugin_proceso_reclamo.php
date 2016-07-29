@@ -369,6 +369,7 @@ class Plugin_proceso_reclamo extends PL_Controller {
 		
 		$update = $this->plugin_reclamos->update($update_data, $order['order']);
 		if($update):
+			$this->fw_posts->send_upgrade_info($update_data, $order['order']);
 			return $pdf = $this->fw_export->pdf_upgrade($update_data);
 		else:
 			echo "Error al tratar de actualizar.";
