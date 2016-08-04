@@ -101,11 +101,13 @@ class Plugin_payrolls extends PL_Controller {
 		$data_array['body'] 				= '';
 		foreach($result_array as $i => $field):
 		$sentemail							= ($field->PAYROLL_EMAILSENT == 'SI')?"":'<span class="active-nonsent">&#9679;</span> ';
+		$filepreview						= ($field->PAYROLL_SETTLEMENT == 'SI')?"filepreview_settlement":"filepreview_payroll";
+		
 		$employees[$field->PAYROLL_EMPLOYEE] = array('SALESMAN_NAME' => $field->SALESMAN_NAME.' '.$field->SALESMAN_LASTNAME, 'SALESMAN_POSITION' => $field->SALESMAN_POSITION, 'SALESMAN_WORKHOURS' => $field->SALESMAN_WORKHOURS);
 		$data_array['body']					.= '<tr>';
 		$data_array['body']					.= '<td><a href="'.base_url('cms/'.strtolower($this->current_plugin).'/update_table_row/'.$field->ID).'">'.$date['meses'][date_format(date_create($field->PAYROLL_ENDDATE), 'm')].', '.date_format(date_create($field->PAYROLL_ENDDATE),'Y').'</a></td>';
 		$data_array['body']					.= '<td>'.$sentemail.$field->SALESMAN_NAME.' '.$field->SALESMAN_LASTNAME.'</td>';
-		$data_array['body']					.= '<td>'.$field->PAYROLL_SALARYPAID.' <a href="#" data-toggle="modal" data-target="#myModal" data-payrollid="'.$field->ID.'"><span class="glyphicon glyphicon-play-circle pull-right" data-toggle="tooltip" data-placement="top" title="Previsualizar planilla"></span></a></td>';
+		$data_array['body']					.= '<td>'.$field->PAYROLL_SALARYPAID.' <a href="'.base_url('cms/'.strtolower($this->current_plugin).'/email_payroll/'.$field->ID.'/boleta-'.url_title($field->SALESMAN_NAME.'-'.$field->SALESMAN_LASTNAME)).'" class="btn btn-default btn-xs pull-right" target="_blank"><span class="glyphicon glyphicon-inbox" data-toggle="tooltip" data-placement="top" title="Mostrar Boleta"></span></a><a href="#" class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#myModal" data-payrollid="'.$field->ID.'"><span class="glyphicon glyphicon-new-window" data-toggle="tooltip" data-placement="top" title="Previsualizar planilla"></span></a></td>';
 		$data_array['body']					.= '</tr>';
 		endforeach;
 	
@@ -164,7 +166,11 @@ class Plugin_payrolls extends PL_Controller {
     }
 	public function _html_plugin_update($result_data){
 		
-		$employees					= $this->get_staff_list();
+		$employees					= $this->get_staff_list()->complete;
+		$employees					= array('' => 'Seleccionar empleado') + $employees; //Añadir campo en blanco
+		$employeesdisabled			= $this->get_staff_list()->disabled;
+		
+		//$employees					= $this->get_staff_list();
 		$liquidacion				= array('NO' => 'No', 'SI' => 'Si - Sin indemnizaci&oacute;n', 'INDEMNIZAR' => 'Si - Con indemnizaci&oacute;n');
 		$selectdisabled				= ($result_data->PAYROLL_CLOSE == 'NO')?"":"disabled = 'disabled'";
 		$disabled					= ($result_data->PAYROLL_CLOSE == 'NO')?array():array("disabled" => "disabled");
@@ -176,7 +182,7 @@ class Plugin_payrolls extends PL_Controller {
 		$data_array['form_html']	.=  "<div class='row'><div class='col-lg-12 col-md-12 col-sm-12'>".validation_errors()."</div></div>";
 		
 		//Formulario
-		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[1],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_EMPLOYEE', $employees, $result_data->PAYROLL_EMPLOYEE, 'class="form-control" '.$selectdisabled)."</div></div>";
+		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[1],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_EMPLOYEE', $employees, $result_data->PAYROLL_EMPLOYEE, 'class="form-control" '.$selectdisabled, $employeesdisabled)."</div></div>";
 		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[2],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_INITIALDATE', 'value' => $result_data->PAYROLL_INITIALDATE, 'class' => 'form-control', 'data-date-format' => 'YYYY-MM-DD',  'readonly' => 'readonly'))."<p class='help-block'>Fecha inicial para contabilizar dias laborados en pago planilla.</p></div></div>";
 		$data_array['form_html']	.=  "<div class='form-group'>".form_label($this->plugin_display_array[3],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_input(array('name' => 'PAYROLL_ENDDATE', 'value' => $result_data->PAYROLL_ENDDATE, 'class' => 'datetimepicker form-control', 'data-date-format' => 'YYYY-MM-DD')+$disabled)."<p class='help-block'>Fecha final para contabilizar en pago de planilla.</p></div></div>";
 		$data_array['form_html']	.= "<div class='form-group'>".form_label($this->plugin_display_array[12],'',array('class' => 'form-label col-lg-2'))."<div class='col-lg-10'>".form_dropdown('PAYROLL_SETTLEMENT', $liquidacion,$result_data->PAYROLL_SETTLEMENT, 'class="form-control" id="PAYROLL_SETTLEMENT" '.$selectdisabled)."<p class='help-block'>Seleccionar si es la planilla de liquidaci&oacute;n de empleado. En caso haya que liquidar, seleccionar si se pagar&aacute; indemnizaci&oacute;n o no.</p></div></div>";
@@ -240,7 +246,6 @@ class Plugin_payrolls extends PL_Controller {
 	/*
 	 * Funciones específicas del plugin
 	 */
-	 
 	 /**
 	  * Función para devolver si es válido el formulario
 	  * @var $form_posts - Datos a validar enviados en el formulario.
@@ -341,7 +346,9 @@ class Plugin_payrolls extends PL_Controller {
 		
 		return $employees;
 	}
-	
+	/**
+	 * 
+	 */
 	private function calculo_total_devengado($employeeid, $initialdate, $enddate, $extrahours, $sales_goal, $salesreached, $store_salesgoal, $store_salesreached, $festivehours, $liquidar = 'NO', $extra_income, $extra_discount){
 		
 		$employee['COLUMN_VAR'] 	= $employeeid;
@@ -434,11 +441,12 @@ class Plugin_payrolls extends PL_Controller {
 		
 		//Obtener fecha de pago bono14
 		$monthtopay					= str_pad($monthtopay, 2, 0, STR_PAD_LEFT);
-		$payedbonusyear				= (date('m') > $monthtopay)?date('Y'):(date('Y')-1);
+		list($endy, $endm, $endd) 	= explode("-", $employeedata->PAYROLL_ENDDATE);//Obtener dia mes y año separado de la fecha final
+		$payedbonusyear				= ($endm > $monthtopay)?date('Y'):(date('Y')-1); //colocar el año en el que se pagó el último bono
+		$payedbonusyear				= (isset($employeedata->PAYROLL_SETTLEMENT) && $employeedata->PAYROLL_SETTLEMENT == 'SI' && $endm == $monthtopay && ($employeedata->PAYROLL_ENDDATE >= date('Y').'-'.$monthtopay.'-15'))?date('Y'):$payedbonusyear;
 		$lastpaymentmade			= $payedbonusyear.'-'.$monthtopay.'-01'; //Fecha del último pago de bono 14 realizado.
 		$bonusdate					= (date('Y-').$monthtopay.'-01'); //Fecha de pago de bono14
-		$nextpayment				= (date('m') > $monthtopay)?((date('Y') + 1).'-'.$monthtopay.'-01'):(date('Y-').$monthtopay.'-01');
-		list($endy, $endm, $endd) 	= explode("-", $employeedata->PAYROLL_ENDDATE);//Obtener dia mes y año separado de la fecha final
+		$nextpayment				= ($endm > $monthtopay)?((date('Y') + 1).'-'.$monthtopay.'-01'):(date('Y-').$monthtopay.'-01'); //Fecha del próximo pago de bono 14
 		$paymentenddate 			= ($endm == $monthtopay)?$endy.'-'.str_pad($endm - 1, 2, 0, STR_PAD_LEFT).'-'.$endd:$employeedata->PAYROLL_ENDDATE; //Colocar el mes anterior como fecha final, en caso el mes final de planilla sea el mes a pagar bono.
 		
 		
@@ -466,13 +474,12 @@ class Plugin_payrolls extends PL_Controller {
 		$monthlyavecommission		= array_sum($yearCommissions); //Comisiones promedio de seis meses
 		$monthlyavesalary			= (array_sum($yearSalary) + $salariodevengadobono); //Salario total en un mes promedio.Sumando el salario del mes en curso mas los anteriores. 
 		$data['totalreceivedmonthly']= (($monthlyavesalary + $monthlyavecommission) / $data['dayssalarypaid']) * 30; //Total recibido en un mes promedio
+		
 		/*
 		echo "<pre>";
-		print_r($data);
-		print_r($yearSalary);
-		print_r($yearCommissions);
-		echo "</pre>";*/
-		
+		print_r($paymentenddate);
+		echo "</pre>";
+		/**/
 		return $data;
 	}
 	private function bono14($employeedata, $salariodevengadobono = 0){
@@ -755,19 +762,29 @@ class Plugin_payrolls extends PL_Controller {
 	/**
 	 * Función para enviar datos de la planilla por correo
 	 */
-	public function email_payroll($payrollid = NULL){
+	public function email_payroll($payrollid = NULL, $preview = FALSE){
 		
 		$payrolldata		= $this->plugin_payrolls->get_payroll($payrollid); //Obtener datos de la planilla.
-		$this->payroll_pdf($payrollid);
 		
 		if($payrolldata->PAYROLL_SETTLEMENT == 'NO'): 
-			//Si no es liquidación del empleado	
-			if(file_exists($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payrollid.'.pdf'))): //Confirmar si existe el archivo de planilla.
-				$this->fw_posts->payroll_confirmation($payrolldata); //Enviar el correo electrónico.
-				$this->plugin_payrolls->update(array('PAYROLL_EMAILSENT' => 'SI'), $payrollid); //Actualizar a enviado el correo electrónico.
-				$this->fw_alerts->add_new_alert(3001, 'SUCCESS');
+			if($preview != FALSE):
+			  	$this->load->library('FW_export', $payrollid);
+				$this->load->model('cms/cms_plugin_payrolls', 'plugin_payrolls');
+				$payrolls = $this->plugin_payrolls->get_payroll($payrollid);
+				
+				$bono14		= $this->bono14($payrolls);
+				
+				$this->fw_export->pdfpayrollPreview($payrolls, $bono14);
 			else:
-				$this->fw_alerts->add_new_alert(3002, 'ERROR');
+				$this->payroll_pdf($payrollid);
+				//Si no es liquidación del empleado	
+				if(file_exists($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payrollid.'.pdf'))): //Confirmar si existe el archivo de planilla.
+					$this->fw_posts->payroll_confirmation($payrolldata); //Enviar el correo electrónico.
+					$this->plugin_payrolls->update(array('PAYROLL_EMAILSENT' => 'SI'), $payrollid); //Actualizar a enviado el correo electrónico.
+					$this->fw_alerts->add_new_alert(3001, 'SUCCESS');
+				else:
+					$this->fw_alerts->add_new_alert(3002, 'ERROR');
+				endif;
 			endif;
 		else: 
 			//Si es liquidación de empleado
@@ -801,18 +818,24 @@ class Plugin_payrolls extends PL_Controller {
 			endif;
 			$totalindemnizar			= ($indemnizacion != FALSE)?$indemnizacion['totalindemnizar']:0;
 			$liquidaciontotal			= ($payrolldata->PAYROLL_TOTALACCRUED + $vacations['total'] + $bono14['total14bonus'] + $aguinaldo['totalchristmasbonus'] + $totalindemnizar);
-			
-			$this->fw_export->pdfsettlement($payrollid, $vacations, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal);
-			
-			if(file_exists($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/finiquito'.$payrollid.'.pdf'))): //Confirmar si existe el archivo de planilla.
-				$payrolldata->PAYROLL_INITIALDATE 	= $employeedata->SALESMAN_COMMENCEMENT;
-				$payrolldata->PAYROLL_TOTALACCRUED	= $liquidaciontotal;
-				$this->fw_posts->payroll_settlement($payrolldata); //Enviar el correo electrónico.
-				$this->plugin_payrolls->update(array('PAYROLL_EMAILSENT' => 'SI'), $payrollid); //Actualizar a enviado el correo electrónico.
-				$this->fw_alerts->add_new_alert(3001, 'SUCCESS');
+
+			//Obtener preview o archivo exportado final
+			if($preview != FALSE):
+				$this->fw_export->pdfsettlementPreview($payrollid, $vacations, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal);
 			else:
-				$this->fw_alerts->add_new_alert(3002, 'ERROR');
+				$this->fw_export->pdfsettlement($payrollid, $vacations, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal);
+					
+				if(file_exists($_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/finiquito'.$payrollid.'.pdf'))): //Confirmar si existe el archivo de planilla.
+					$payrolldata->PAYROLL_INITIALDATE 	= $employeedata->SALESMAN_COMMENCEMENT;
+					$payrolldata->PAYROLL_TOTALACCRUED	= $liquidaciontotal;
+					$this->fw_posts->payroll_settlement($payrolldata); //Enviar el correo electrónico.
+					$this->plugin_payrolls->update(array('PAYROLL_EMAILSENT' => 'SI'), $payrollid); //Actualizar a enviado el correo electrónico.
+					$this->fw_alerts->add_new_alert(3001, 'SUCCESS');
+				else:
+					$this->fw_alerts->add_new_alert(3002, 'ERROR');
+				endif;
 			endif;
+			
 		endif;
 		
 		redirect('cms/'.strtolower($this->current_plugin));

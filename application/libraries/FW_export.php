@@ -378,7 +378,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Output();
 	 }
 	//PDF Planillas
-	public function pdfpayroll($payrolls, $bono14){
+	public function pdfpayroll_display($payrolls, $bono14){
 		
 		
 		list($iniy, $inim, $inid) = explode("-", $payrolls->PAYROLL_INITIALDATE); //Obtener dia mes y año separado de la fecha de inicio
@@ -391,7 +391,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->SetFont('Arial','B',16);
 				
 		$pdf->Image(base_url('library/cms/img/logo-iCinco-negro.png'),10,7,40);
-		$pdf->Image(base_url('library/cms/img/logo-iCinco-negro.png'),10,142,40);
+		$pdf->Image(base_url('library/cms/img/logo-iCinco-negro.png'),10,135,40);
 		
 	for($i = 0; $i <= 1; $i++):	 	
 		
@@ -401,7 +401,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell(0, 5, "Planilla de salarios", 0, 0, "C");
 		
 		$pdf->SetFont('Arial','',9);
-		$pdf->Ln(7);
+		$pdf->Ln(3);
 		
 		//Información general de planilla
 		$pdf->Cell(40,10,'Salario Nominal:',0,0);
@@ -478,23 +478,39 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell(60, 6, "Neto a pagar", 0, 0, "C");
 		$pdf->Cell(30, 6, "Q. ".number_format(($payrolls->PAYROLL_TOTALACCRUED + $payrolls->PAYROLL_TOTALDISCOUNT), 2, ".", ""), "LBTR", 1, "R");
 		$pdf->Cell(0, 6, "Recibí Conforme:", 0, 0, "L");
-		$pdf->Ln(15);
+		$pdf->Ln(14);
 		$pdf->Cell(40, 6, "Fecha", "T", 0, "L");
 		$pdf->Cell(10, 6, NULL, 0, 0);
 		$pdf->Cell(80, 6, "Nombre", "T", 0, "L");
 		$pdf->Cell(10, 6, NULL, 0, 0);
 		$pdf->Cell(50, 6, "Firma", "T", 1, "L");
-		$pdf->Ln(10);
+		$pdf->Ln(7);
 	endfor;
 	
-	$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payrolls->ID.'.pdf');
-	return $pdf->Output($filename,'F');
+	return $pdf;
 	
 }
 	/**
+	 * Boleta de planilla
+	 */
+	 public function pdfpayroll($payrolls, $bono14){
+	 	$pdf = $this->pdfpayroll_display($payrolls, $bono14);
+		
+		$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planilla'.$payrolls->ID.'.pdf');
+		return $pdf->Output($filename,'F');
+	 }
+	 /**
+	  * Ver la boleta
+	  */
+	  public function pdfpayrollPreview($payrolls, $bono14){
+	 	$pdf = $this->pdfpayroll_display($payrolls, $bono14);
+		
+		return $pdf->Output();
+	 }
+	/**
 	 * Función de finiquito de planilla en pdf.
 	 */	
-	 public function pdfsettlement($id, $vacaciones, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal){
+	 public function pdfsettlement_display($id, $vacaciones, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal){
 		
 		$this->FW->load->model('cms/cms_plugin_payrolls', 'plugin_payrolls');
 		$payrolls			= $this->FW->plugin_payrolls->get_payroll($id);
@@ -636,10 +652,28 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Ln(30);
 		$pdf->SetFont('Arial','B',9);
 		$pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->SALESMAN_NAME." ".$payrolls->SALESMAN_LASTNAME))), 0, 1, "L");
+
+		return $pdf;
+
+//		return $pdf->Output();
+	 }
+	/**
+	 * función para obtener el archivo exportado pdf
+	 */
+	 public function pdfsettlement($id, $vacaciones, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal){
+	 	$pdf 				= $this->pdfsettlement_display($id, $vacaciones, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal);
 		
-		$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/finiquito'.$payrolls->ID.'.pdf');
+		$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/finiquito'.$id.'.pdf');
 		return $pdf->Output($filename,'F');
+	 }
+	 /**
+	  * Función para ver el finiquito
+	  */
+	  public function pdfsettlementPreview($id, $vacaciones, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal){
+
+	 	$pdf 				= $this->pdfsettlement_display($id, $vacaciones, $bono14, $aguinaldo, $indemnizacion, $liquidaciontotal);
 		
+		return $pdf->Output();
 	 }
 
 /**
