@@ -766,6 +766,7 @@ class Plugin_payrolls extends PL_Controller {
 		
 		$payrolldata		= $this->plugin_payrolls->get_payroll($payrollid); //Obtener datos de la planilla.
 		
+		
 		if($payrolldata->PAYROLL_SETTLEMENT == 'NO'): 
 			if($preview != FALSE):
 			  	$this->load->library('FW_export', $payrollid);
@@ -817,7 +818,7 @@ class Plugin_payrolls extends PL_Controller {
 				$indemnizacion['totalindemnizar'] = ($indemnizacion['indemizaryear'] + $indemnizacion['indemizarday']);
 			endif;
 			$totalindemnizar			= ($indemnizacion != FALSE)?$indemnizacion['totalindemnizar']:0;
-			$liquidaciontotal			= ($payrolldata->PAYROLL_TOTALACCRUED + $vacations['total'] + $bono14['total14bonus'] + $aguinaldo['totalchristmasbonus'] + $totalindemnizar);
+			$liquidaciontotal			= ($payrolldata->PAYROLL_TOTALACCRUED + $payrolldata->PAYROLL_TOTALDISCOUNTS + $vacations['total'] + $bono14['total14bonus'] + $aguinaldo['totalchristmasbonus'] + $totalindemnizar);
 
 			//Obtener preview o archivo exportado final
 			if($preview != FALSE):

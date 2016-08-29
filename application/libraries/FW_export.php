@@ -514,6 +514,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		
 		$this->FW->load->model('cms/cms_plugin_payrolls', 'plugin_payrolls');
 		$payrolls			= $this->FW->plugin_payrolls->get_payroll($id);
+		$payrolls->PAYROLL_TOTALACCRUED	= ($payrolls->PAYROLL_TOTALACCRUED + $payrolls->PAYROLL_TOTALDISCOUNTS);
 		
 		list($iniy, $inim, $inid) = explode("-", $payrolls->PAYROLL_INITIALDATE); //Obtener dia mes y año separado de la fecha de inicio
 		list($endy, $endm, $endd) = explode("-", $payrolls->PAYROLL_ENDDATE);//Obtener dia mes y año separado de la fecha final
@@ -553,11 +554,17 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell($namesize, 5, "Bono Decreto:", 0, 0, "L");
 		$pdf->Cell($amountsize, 5, "Q.".number_format($payrolls->PAYROLL_ESTABLISHEDBONUS,2,'.',','), 0, 1, "L");
 		if(!empty($payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION)):
-		$pdf->Cell($namesize, 5, $payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION, 0, 0, "L");
+		$pdf->Cell(0, 5, $payrolls->PAYROLL_EXTRAINCOMEDESCRIPTION, 0, 1, "L");
+		$pdf->Cell($namesize, 5, "Adicional:", 0, 0, "L");
 		$pdf->Cell($amountsize, 5, "Q.".number_format($payrolls->PAYROLL_EXTRAINCOME,2,'.',','), 0, 1, "L");
 		endif;
+		$pdf->Cell($namesize, 5, "IGSS:", 0, 0, "L");
+		$pdf->Cell($amountsize, 5, "Q.".number_format($payrolls->PAYROLL_IGSS,2,'.',','), 0, 1, "L");
+		$pdf->Cell($namesize, 5, "ISR:", 0, 0, "L");
+		$pdf->Cell($amountsize, 5, "Q.".number_format($payrolls->PAYROLL_ISR,2,'.',','), 0, 1, "L");
 		if(!empty($payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION)):
-		$pdf->Cell($namesize, 5, $payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION, 0, 0, "L");
+		$pdf->Cell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->PAYROLL_EXTRADISCOUNTDESCRIPTION))), 0, 1, "L");
+		$pdf->Cell($namesize, 5, "Descuento:", 0, 0, "L");
 		$pdf->Cell($amountsize, 5, "Q.".number_format($payrolls->PAYROLL_EXTRADISCOUNT,2,'.',','), 0, 1, "L");
 		endif;
 		$pdf->Cell(0, 5, "Q.".number_format($payrolls->PAYROLL_TOTALACCRUED,2,'.',','), "T", 1, "R");
