@@ -536,7 +536,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Ln(10);
 		
 		//Declaración de recepción de prestaciones.
-		$pdf->MultiCell(0, 4, "Yo, ".iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->SALESMAN_NAME." ".$payrolls->SALESMAN_LASTNAME)))." hago constar que he recibido de ICINCO INVERSIONES todas las prestaciones legales que me corresponden del $comd de ".$stringmonth['meses'][$comm].", $comy al $endd de ".$stringmonth['meses'][$endm].", $endy, tiempo durante el cual presté mis servicios desempeñando el puesto de $payrolls->SALESMAN_POSITION, siendo las siguientes:");
+		$pdf->MultiCell(0, 4, "Yo, ".iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->SALESMAN_NAME." ".$payrolls->SALESMAN_LASTNAME))).", de ".$payrolls->SALESMAN_AGE." años de edad, estado civil ".$payrolls->SALESMAN_CIVILSTATUS.", ".$payrolls->SALESMAN_GENDER.", domiciliado y vecino de Guatemala, identificándome con documento personal de identificación ".$payrolls->SALESMAN_DPIWRITTEN." (".$payrolls->SALESMAN_DPI."), extendido en el Registro Nacional de las Personas. Hago constar que he recibido de ICINCO SOCIEDAD ANÓNIMA todas las prestaciones legales que me corresponden del $comd de ".$stringmonth['meses'][$comm].", $comy al $endd de ".$stringmonth['meses'][$endm].", $endy, tiempo durante el cual presté mis servicios desempeñando el puesto de $payrolls->SALESMAN_POSITION, siendo las siguientes:");
 		$pdf->Ln(5);
 		$pdf->SetFont('Arial','B',9);
 		
@@ -655,7 +655,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell(160, 5, "Q.".number_format($liquidaciontotal,2,'.',','), 0, 1, "R");
 		$pdf->Ln(3);
 		$pdf->SetFont('Arial','',9);
-		$pdf->MultiCell(0, 5, "Y para los usos legales que convengan a ICINCO INVERSIONES, extiendo y firmo  este amplio y eficaz finiquito laboral, en la ciudad de Guatemala, al dia $endd de ".$stringmonth['meses'][$endm]." del $endy.");
+		$pdf->MultiCell(0, 5, "Por lo expuesto otorgo a favor de la entidad ICINCO, SOCIEDAD ANONIMA, el más amplio, completo, total y eficaz FINIQUITO LABORAL, por todo el tiempo que laboré con dicho empleador, sin reservarme acción alguna, toda vez que se me han cancelado plena y totalmente las prestaciones laborales que me correspondían el dia $endd de ".$stringmonth['meses'][$endm]." del $endy.");
 		$pdf->Ln(30);
 		$pdf->SetFont('Arial','B',9);
 		$pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($payrolls->SALESMAN_NAME." ".$payrolls->SALESMAN_LASTNAME))), 0, 1, "L");

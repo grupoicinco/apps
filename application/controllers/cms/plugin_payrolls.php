@@ -415,7 +415,7 @@ class Plugin_payrolls extends PL_Controller {
 		
 		//Descuentos
 		//IGSS
-		$return['discount_salary'][1] = ($employeedata->SALESMAN_IGSSINSCRIPTION == 'SI')?((array_sum($return['earned_salary']) - $return['earned_salary'][6]) * $this->fw_resource->request('RESOURCE_IGSS_LABOR_QUOTA')) * -1:0.00;
+		$return['discount_salary'][1] = ($employeedata->SALESMAN_IGSSINSCRIPTION == 'SI')?((array_sum($return['earned_salary']) - $return['earned_salary'][6] + $employeedata->SALESMAN_PROFITTAX + $extra_discount) * $this->fw_resource->request('RESOURCE_IGSS_LABOR_QUOTA')) * -1:0.00;
 		//ISR
 		$return['discount_salary'][2] = $employeedata->SALESMAN_PROFITTAX;
 		//Descuento adicional
