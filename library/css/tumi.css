@@ -511,8 +511,17 @@ a.navbar-brand,
 a.navbar-brand:hover{
 	background-color:#BF2031 !important;
 }
-a.navbar-brand > img{
-	width:70px;
+a.navbar-brand.icinco, a.navbar-brand.icinco:hover{
+	background-color:#3D91D7 !important;
+	text-align:center;
+	padding:0;
+	min-width:90px;
+}
+a.navbar-brand.icinco, a.navbar-brand.icinco:hover,
+a.navbar-brand.icinco > img{
+	width:46px;
+	position:relative;
+	margin:0 auto;
 }
 .navbar-default .navbar-nav > li > a.navbar-menu-display{
 	height:45px;
@@ -2264,7 +2273,12 @@ form#tumitracer{
 	font-size:14px;
 	color:#222222;
 }
-
+#tumitracerform strong.discquestion_label{
+	font-size:10px;
+}
+#tumitracerform .questions_group{
+	/*border-right:1px solid #ebebeb;*/
+}
 #tumitracerform .panel .panel-body label span{
 	color:#C41E3A;
 }

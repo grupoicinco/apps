@@ -41,7 +41,7 @@ class Plugin_staff_vacations extends PL_Controller {
 		$this->display_filter				= FALSE; //Mostrar filtro de búsqueda 'SEARCH' o según listado 'LIST' o no mostrar FALSE
 		
 		//Obtener el profiler del plugin
-		$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(FALSE);
 	}
 	
 	/**
