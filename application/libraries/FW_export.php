@@ -755,4 +755,107 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$filename	= $_SERVER['DOCUMENT_ROOT'].('/app/user_files/uploads/planillas/planillageneral'.$filename.'.pdf');
 		return $pdf->Output($filename,'F');
  	}
+	/**
+	 * Crear PDF con resultado de prueba DISC
+	 * @var $user_data - Object con datos de la persona que realizó la prueba
+	 * @var $personality - String con el tipo de personalidad.
+	 * @var $personality_desc - Array con las descripciones de la personalidad.
+	 */
+	public function disc_result_pdf($user_data = NULL, $personality = NULL, $personality_desc = array()){
+		
+		//Iniciar el PDF
+	 	$pdf = new PDF();
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','',7);
+		$pdf->SetTextColor(0,146,218);
+				
+		$pdf->Image(base_url('library/cms/img/logo-iCinco-color.png'),10,7,40);
+		
+		$pdf->Cell(0, 3, "D. ".iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($this->FW->fw_resource->request("RESOURCE_COMPANY_ADDRESS")))), 0, 1, "R");
+		$pdf->Cell(0, 3, "W. ".$this->FW->fw_resource->request("RESOURCE_COMPANY_WEBSITE"), 0, 1, "R");
+		$pdf->Cell(0, 3, "T. ".$this->FW->fw_resource->request("RESOURCE_COMPANY_PHONE")." E. ".$this->FW->fw_resource->request("RESOURCE_COMPANY_EMAIL"), 0, 1, "R");
+		
+		$pdf->SetFont('Arial','B',14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->Ln(9);
+		$pdf->Cell(0, 6, $this->FW->fw_resource->request("RESOURCE_COMPANY_NAME"), 0, 1, "C");
+		$pdf->Cell(0, 6, "PRUEBA DE PERSONALIDAD DISC", 0, 0, "C");
+		$pdf->SetFont('Arial','',11);
+		$pdf->Ln(12);
+		
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Nombre completo:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->Cell(161, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($user_data->LASTNAME.", ".$user_data->NAME))), 0, 1, "L");
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Documento de identificación:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->Cell(161, 5, $user_data->IDNUMBER, 0, 1, "L");
+		$datetime1 					= new DateTime($user_data->BIRTHDATE);
+		$datetime2 					= new DateTime(date('Y-m-d'));
+		$interval 					= $datetime1->diff($datetime2);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Edad:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->Cell(161, 5, $interval->format('%Y')." años", 0, 1, "L");
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Fecha de la prueba:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->Cell(161, 5, mysql_date_to_dmy($user_data->TEST_DATE), 0, 1, "L");
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Tipo de personalidad:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->Cell(161, 5, strtoupper(iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality)))), 0, 1, "L");
+		
+		$pdf->Ln(9);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->TYPEDESC_DESC))));
+		$pdf->Ln(9);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Emociones:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_EMOTIONS_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Meta:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_GOAL_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Juzga a los demas por:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_JUDGE_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Influye mediante:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_INFLUENCE_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Valor para la organización:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_VALUE_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Abusa de:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_ABUSE_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Bajo presión:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_PRESSION_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Teme a:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_FEAR_DESC))));
+		$pdf->Ln(1);
+		$pdf->SetTextColor(0,146,218);
+		$pdf->Cell(60, 5, "Sería mas eficaz si:", 0, 0, "R");
+		$pdf->SetTextColor(0,0,0);
+		$pdf->MultiCell(0, 5, iconv('UTF-8', 'windows-1252', strip_tags(html_entity_decode($personality_desc->DESCRIPTIONS_EFFICIENT_DESC))));
+		
+		
+		return $pdf->Output();
+	}
 }

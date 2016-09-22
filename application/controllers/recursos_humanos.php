@@ -7,6 +7,8 @@ class Recursos_humanos extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->model('plugins/rrhh_model', 'rrhh_model');		
+		$this->load->library("FW_export");
+		
 		//Obtener el profiler del plugin
 		$this->output->enable_profiler(TRUE);
 	}
@@ -43,11 +45,12 @@ class Recursos_humanos extends CI_Controller {
 			if($this->form_validation->run() == FALSE):
 				$this->load->template('formulario_disc', $data);
 			else:
-				$updatedata['TEST_MASANSWERS'] 	= json_encode($this->input->post('MASDISC'));
+				$updatedata['TEST_MASANSWERS']		= json_encode($this->input->post('MASDISC'));
 				$updatedata['TEST_MENOSANSWERS'] 	= json_encode($this->input->post('MENOSDISC'));
-				$expiration_date 			= strtotime ( '+1 year' , strtotime (date('Y-m-d')) ) ;
-				$expiration_date 			= date ( 'Y-m-d' , $expiration_date);
-				$updatedata['TEST_EXPDATE']		= $expiration_date;
+				$expiration_date 					= strtotime ( '+1 year' , strtotime (date('Y-m-d')) ) ;
+				$expiration_date 					= date ( 'Y-m-d' , $expiration_date);
+				$updatedata['TEST_DATE']			= date('Y-m-d');
+				$updatedata['TEST_EXPDATE']			= $expiration_date;
 				
 				$this->rrhh_model->update($updatedata, $id, NULL, 'PLUGIN_DISC_TESTS');
 				
@@ -95,24 +98,6 @@ class Recursos_humanos extends CI_Controller {
 	  	$personalities				= array('EMOTIONS', 'GOAL', 'JUDGE', 'INFLUENCE', 'VALUE', 'ABUSE', 'PRESSION', 'FEAR', 'EFFICIENT');
 		$descriptions				= $this->rrhh_model->disc_descriptions($pauta_code, $personalities);
 		
-		echo "Mas:<pre>";
-		print_r($typemas);
-		echo "</pre><br />";
-		echo "Menos:<pre>";
-		print_r($typemenos);
-		echo "</pre><br />";
-		echo "Segmento:<pre>";
-		print_r($segment);
-		echo "</pre><br />";
-		echo "Pauta:<pre>";
-		print_r($pauta);
-		echo "</pre><br />";
-		echo $pauta_number;
-		echo "<br />";
-		echo $pauta_personality."($pauta_code)";
-		echo "<br />";
-		echo "Descripciones:<pre>";
-		print_r($descriptions);
-		echo "</pre><br />";
+		$this->fw_export->disc_result_pdf($disc_data, $pauta_personality, $descriptions);
 	 }
 }
