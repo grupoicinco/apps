@@ -35,7 +35,7 @@ class Rrhh_model extends MY_Model {
 		$validation = ($tipo->TEST_PASSCODE == $passcode)?TRUE:FALSE;
 		
 		if($tipo->TEST_TYPE == 'Empleado' && $validation):
-			$query = $this->db->select("PDT.ID, PSM.ID AS USERID, PDT.TEST_PASSCODE, PDT.TEST_DATE, PDT.TEST_MASANSWERS, PDT.TEST_MENOSANSWERS, PDT.TEST_EXPDATE, PSM.SALESMAN_SAC_CODE AS CODE, PSM.SALESMAN_NAME AS NAME, PSM.SALESMAN_LASTNAME AS LASTNAME, PSM.SALESMAN_DPI AS IDNUMBER, PSM.SALESMAN_BIRTHDATE AS BIRTHDATE")
+			$query = $this->db->select("PDT.ID, PSM.ID AS USERID, PDT.TEST_PASSCODE, PDT.TEST_DATE, PDT.TEST_MASANSWERS, PDT.TEST_MENOSANSWERS, PDT.TEST_EXPDATE, PSM.SALESMAN_SAC_CODE AS CODE, PSM.SALESMAN_NAME AS NAME, PSM.SALESMAN_LASTNAME AS LASTNAME, PSM.SALESMAN_EMAIL AS USER_EMAIL, PSM.SALESMAN_DPI AS IDNUMBER, PSM.SALESMAN_BIRTHDATE AS BIRTHDATE")
 					->from($this->test_table.' PDT')
 					->join('PLUGIN_SALESMAN PSM', 'PSM.ID = PDT.TEST_PERSON')
 					->where('PDT.ID', $id)->get();
@@ -100,4 +100,20 @@ class Rrhh_model extends MY_Model {
 							->where("PDD.ID", $personalitynum)->get();
 			return $query->row();
 		  }
+		  /**
+		   * Obtener listado de las pruebas DISC
+		   */
+		   public function list_disc_tests($where = NULL){
+		   	
+				$query = $this->db->select("PDT.ID, PSM.ID AS USERID, PDT.TEST_PASSCODE, PDT.TEST_DATE, PDT.TEST_MASANSWERS, PDT.TEST_MENOSANSWERS, PDT.TEST_EXPDATE, PSM.SALESMAN_SAC_CODE AS CODE, PSM.SALESMAN_NAME AS NAME, PSM.SALESMAN_LASTNAME AS LASTNAME, PSM.SALESMAN_EMAIL AS USER_EMAIL, PSM.SALESMAN_DPI AS IDNUMBER, PSM.SALESMAN_BIRTHDATE AS BIRTHDATE")
+						->from($this->test_table.' PDT')
+						->join('PLUGIN_SALESMAN PSM', 'PSM.ID = PDT.TEST_PERSON');
+				if(!empty($where)):
+				$query = $query->where($where);
+				endif;
+				
+				$employees = $query->get()->result();
+				
+				return $employees;
+		   }
 }

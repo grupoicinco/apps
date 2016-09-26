@@ -404,6 +404,44 @@ class FW_posts {
 			return FALSE;
 		endif;
 	 }
+	/**
+	 * Función para enviar solicitud de responder prueba DISC.
+	 * @var $test_data - Objeto con los datos de la prueba.
+	 */
+	 public function disc_reminder($test_data){
+	 	
+		if(!empty($test_data)):
+			//Establecer parámetros
+			$this->FW->email->from($this->FW->fw_resource->request('RESOURCE_HR_EMAIL'),$this->FW->fw_resource->request('RESOURCE_HR_MANAGER'));
+			$this->FW->email->to($test_data->USER_EMAIL);
+
+			
+			$this->FW->email->subject('Prueba DISC de personalidad');
+			$html_body = array(
+							array(
+								'LABEL' 	=> NULL,
+								'POSTVAL'	=> "Hola ".$test_data->NAME." ".$test_data->LASTNAME.","
+							),
+							array(
+								'LABEL' 	=> NULL,
+								'POSTVAL'	=> "Se ha habilitado la prueba de personalidad DISC que solicitamos puedas completar a través de un formulario de 24 preguntas que toma alrededor de 15 minutos.<br />Al terminar la prueba y deseas recibir tu resultado, puedes escribir a sheny.huelva@grupoi5.com para solictar se te env&iacute;e."
+							),
+							array(
+								'LABEL' 	=> NULL,
+								'POSTVAL'	=> "Para responder la prueba puedes hacerlo a trav&eacute;s del enlace siguiente:"
+							),
+							array(
+								'LABEL' 	=> "Enlace:",
+								'POSTVAL'	=> '<a target="_blank" href="'.base_url('recursos_humanos/formulario_disc/'.$test_data->TEST_PASSCODE.'/'.$test_data->ID).'">'.base_url('recursos_humanos/formulario_disc/'.$test_data->TEST_PASSCODE.'/'.$test_data->ID).'</a>'
+							)
+						);
+			$html_message = $this->_icinco_html_template($this->current_website, $html_body, $this->company, $this->tel, $this->contact_email);
+			$this->FW->email->message($html_message);
+			return $this->FW->email->send();
+		else:
+			return FALSE;
+		endif;
+	 }
 
 	/**
 	 * Template del HTML a enviar por correo

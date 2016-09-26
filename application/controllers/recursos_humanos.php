@@ -10,7 +10,7 @@ class Recursos_humanos extends CI_Controller {
 		$this->load->library("FW_export");
 		
 		//Obtener el profiler del plugin
-		$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(FALSE);
 	}
 	
 	public function index(){
@@ -99,5 +99,24 @@ class Recursos_humanos extends CI_Controller {
 		$descriptions				= $this->rrhh_model->disc_descriptions($pauta_code, $personalities);
 		
 		$this->fw_export->disc_result_pdf($disc_data, $pauta_personality, $descriptions);
+	 }
+	/**
+	 * Enviar correo de realizar prueba DISC
+	 */
+	 public function disc_reminder(){
+	 	$where 	= "PDT.ID = '3'";
+		$users	= $this->rrhh_model->list_disc_tests();
+		foreach($users as $userdata):
+			//Convertir respuestas en array
+			$mas						= json_decode($userdata->TEST_MASANSWERS, TRUE);
+			$menos						= json_decode($userdata->TEST_MENOSANSWERS, TRUE);
+			//Obtener número de valores según si son t,c,e,z
+			$typemas					= count($mas);
+			$typemenos					= count($menos);
+			if($typemas < 24 || $typemenos < 24):
+				//Si las respuestas son menores a 24, enviar correo para finalizar la prueba.
+				$this->fw_posts->disc_reminder($userdata);
+			endif;
+		endforeach;
 	 }
 }
