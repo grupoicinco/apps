@@ -39,6 +39,33 @@
 							</dl>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<dl class="dl-horizontal">
+								<dt>Despcripción</dt>
+								<dd><?=$data->PROCESS_DESCRIPTION ?></dd>
+							</dl>
+						</div>
+					</div>
+					<?php if(!empty($data->PROCESS_UPGRADE_RECEIPT_SERIES)):?>
+					<div class="row">
+						<div class="col-lg-12">
+							<h3>Cambio de producto:</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<dl class="dl-horizontal">
+								<dt>Factura:</dt>
+								<dd><?=$data->PROCESS_UPGRADE_RECEIPT_SERIES." ".$data->PROCESS_UPGRADE_RECEIPT_NUMBER ?></dd>
+								<dt>Producto:</dt>
+								<dd><?=$data->PROCESS_UPGRADE_PRODUCT_CODE." ".$data->PROCESS_UPGRADE_PRODUCT_DESCRIPTION ?></dd>
+								<dt>Descuento otorgado:</dt>
+								<dd><?=$data->PROCESS_UPGRADE_DISCOUNT ?></dd>
+							</dl>
+						</div>
+					</div>
+					<?php endif?>
 				</div>
 			</div>
 		</div>
