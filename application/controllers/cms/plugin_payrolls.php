@@ -52,7 +52,7 @@ class Plugin_payrolls extends PL_Controller {
 		$this->display_filter				= FALSE; //Mostrar filtro de búsqueda 'SEARCH' o según listado 'LIST' o no mostrar FALSE
 		
 		//Obtener el profiler del plugin
-		$this->output->enable_profiler(FALSE);
+		$this->output->enable_profiler(TRUE);
 		
 		//Obtener mes cerrado y abierto para planillas
 		$this->payroll_closedmonth			= $this->plugin_payrolls->last_closed_month(); //Obtener el último mes cerrado
@@ -415,7 +415,7 @@ class Plugin_payrolls extends PL_Controller {
 		
 		//Descuentos
 		//IGSS
-		$return['discount_salary'][1] = ($employeedata->SALESMAN_IGSSINSCRIPTION == 'SI')?((array_sum($return['earned_salary']) - $return['earned_salary'][6] + $employeedata->SALESMAN_PROFITTAX + $extra_discount) * $this->fw_resource->request('RESOURCE_IGSS_LABOR_QUOTA')) * -1:0.00;
+		$return['discount_salary'][1] = ($employeedata->SALESMAN_IGSSINSCRIPTION == 'SI')?((array_sum($return['earned_salary']) - $return['earned_salary'][6] /*+ $employeedata->SALESMAN_PROFITTAX + $extra_discount*/) * $this->fw_resource->request('RESOURCE_IGSS_LABOR_QUOTA')) * -1:0.00;
 		//ISR
 		$return['discount_salary'][2] = $employeedata->SALESMAN_PROFITTAX;
 		//Descuento adicional
@@ -688,16 +688,18 @@ class Plugin_payrolls extends PL_Controller {
 	 * @var $employee - ID del empleado
 	 */
 	 private function indemnizacion($employee, $enddate){
-				 	
+			
 			$initialdate				= strtotime('-6 month', strtotime($enddate)); //Fecha inicial de cálculo de comisión
 			$initialdate				= date('Y-m-d',$initialdate);//Fecha para cálculo de comisiones
+			$enddate					= strtotime('-1 day', strtotime($enddate)); //Fecha final de cálculo de comisión
+			$enddate					= date('Y-m-d',$enddate);//Fecha para cálculo de comisiones
 			$payrolls					= $this->plugin_payrolls->payroll_list("PSPR.PAYROLL_EMPLOYEE = '$employee' AND PSPR.PAYROLL_ENDDATE BETWEEN '$initialdate' AND '$enddate'");
-			
+
 			//Obtener total de tiempo laborado
 			$date1						= new DateTime($payrolls[0]->SALESMAN_COMMENCEMENT);
 			$date2						= new DateTime($enddate); //Contar el día último de finalización de la planilla
 			$interval					= $date1->diff($date2);
-			$dayssincecommen			= $interval->format('%a'); //Días transcurridos a la fecha desde el inicio de labores en la empresa del empleado.
+			$dayssincecommen			= $interval->format('%a') + 1; //Días transcurridos a la fecha desde el inicio de labores en la empresa del empleado.
 			$return['yearssincecommen']	= floor($dayssincecommen / 365); //Años en la empresa.
 			$return['dayswithoutyears']	= ($dayssincecommen - ($return['yearssincecommen'] * 365)); //Dias después de los años laborados.
 			$return['dayssincecommen']	= ($dayssincecommen > 180)? 180:$dayssincecommen; //Para cálculo de 
@@ -707,6 +709,7 @@ class Plugin_payrolls extends PL_Controller {
 				$salariespaid[]			= $payroll->PAYROLL_SALARYPAID; //Obtener todos los salarios en un array.
 				$commissions[]			= $payroll->PAYROLL_COMMISSION; //Obtener todos las comisiones en un array.
 			endforeach;
+			
 			$return['salaries']			= array_sum($salariespaid); //Sumar todos los sarios
 			$return['commissions']		= array_sum($commissions); //Sumar todos las comisiones
 			$return['bonos14']			= 0; //Establecer como cero los bono 14, en caso no hayan cumplido los seis meses. colocar el bono 14 del finiquito
