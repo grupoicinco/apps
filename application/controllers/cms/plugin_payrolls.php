@@ -52,7 +52,7 @@ class Plugin_payrolls extends PL_Controller {
 		$this->display_filter				= FALSE; //Mostrar filtro de búsqueda 'SEARCH' o según listado 'LIST' o no mostrar FALSE
 		
 		//Obtener el profiler del plugin
-		$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(FALSE);
 		
 		//Obtener mes cerrado y abierto para planillas
 		$this->payroll_closedmonth			= $this->plugin_payrolls->last_closed_month(); //Obtener el último mes cerrado
@@ -451,13 +451,14 @@ class Plugin_payrolls extends PL_Controller {
 		
 		
 		//Fecha de pago
-		$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
-		$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);
+		/*$salesmancommen_dayprev 	= strtotime ( '-1 day' , strtotime ($employeedata->SALESMAN_COMMENCEMENT) ) ;
+		$salesmancommen_dayprev 	= date ( 'Y-m-d' , $salesmancommen_dayprev);*/
+		$salesmancommen_dayprev		= $employeedata->SALESMAN_COMMENCEMENT;
 		$data['commencementdate']	= ($employeedata->SALESMAN_COMMENCEMENT > $lastpaymentmade)? $salesmancommen_dayprev: $lastpaymentmade; //Obtener fecha de inicio de labores o último pago de bono 14, dependiendo el caso.
 		$firsdate 					= new DateTime($data['commencementdate']); //Fecha desde que inició el cálculo de bono 14
 		$seconddate 				= new DateTime($paymentenddate); //Fecha que finaliza el pago de planilla.
 		$interval 					= $firsdate->diff($seconddate);
-		$dayssalarypaid				= $interval->format('%a');//Calcular el total de días pendiente de pago
+		$dayssalarypaid				= ($interval->format('%a') + 1);//Calcular el total de días pendiente de pago, mas el día de inicio.
 		$data['dayssalarypaid']		= ($dayssalarypaid > 365)?365:$dayssalarypaid; //No contar los días extra de julio.
 		
 		//Obtener comisiones de último pago o tiempo trabajado
@@ -471,8 +472,8 @@ class Plugin_payrolls extends PL_Controller {
 			$yearCommissions[]		= $commissions->PAYROLL_COMMISSION; //Guardar las comisiones en un array.
 			$yearSalary[]			= $commissions->PAYROLL_SALARYPAID; //Guardar los salarios pagados en un array.
 		endforeach;
-		$monthlyavecommission		= array_sum($yearCommissions); //Comisiones promedio de seis meses
-		$monthlyavesalary			= (array_sum($yearSalary) + $salariodevengadobono); //Salario total en un mes promedio.Sumando el salario del mes en curso mas los anteriores. 
+		$monthlyavecommission		= array_sum($yearCommissions); //Sumatoria de las comisiones de un empleado.
+		$monthlyavesalary			= (array_sum($yearSalary) + $salariodevengadobono); //Sumatoria de los salarios de un empleado, mas el del mes en curso.
 		$data['totalreceivedmonthly']= (($monthlyavesalary + $monthlyavecommission) / $data['dayssalarypaid']) * 30; //Total recibido en un mes promedio
 		
 		/*
@@ -812,7 +813,7 @@ class Plugin_payrolls extends PL_Controller {
 				$indemnizacion				= $this->indemnizacion($payrolldata->PAYROLL_EMPLOYEE, $payrolldata->PAYROLL_ENDDATE);
 				//Enviar datos de cálculo de indemnización.
 				$indemnizacion['bonos14']	= ($indemnizacion['bonos14'] > 0)?$indemnizacion['bonos14']:$bono14['total14bonus']; //Colocar el bono 14 proporcional.
-				$indemnizacion['aguinaldos']= ($indemnizacion['aguinaldos'] > 0)?$indemnizacion['aguinaldos']:$aguinaldo['totalchristmasbonus']; //Colocar el bono 14 proporcional.
+				$indemnizacion['aguinaldos']= ($indemnizacion['aguinaldos'] > 0)?$indemnizacion['aguinaldos']:$aguinaldo['totalchristmasbonus'];
 				$indemnizacion['totalganado'] = $indemnizacion['salaries']+$indemnizacion['bonos14']+$indemnizacion['commissions']+$indemnizacion['aguinaldos'];
 				$indemnizacion['promediomes'] = ($indemnizacion['totalganado'] / $indemnizacion['dayssincecommen']) * 30;
 				$indemnizacion['promediodia'] = ($indemnizacion['promediomes'] / 365);
