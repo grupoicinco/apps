@@ -69,6 +69,12 @@ class Plugin_proceso_reclamo extends PL_Controller {
 		$this->output->enable_profiler(FALSE);
 	}
 	
+	//Función para enviar reclamo con los datos específicos
+    public function _plugin_update($id){
+    	
+		$result_array = $this->plugin_reclamos->get_reclaim($id);
+		return $this->_html_plugin_update($result_array);
+	}
 	/**
 	 * Funciones para editar Querys o Datos a enviar desde cada plugin
 	 */
@@ -87,12 +93,6 @@ class Plugin_proceso_reclamo extends PL_Controller {
 		return $this->_html_plugin_display($result_array);
 	}
 	
-	//Función para enviar reclamo con los datos específicos
-    public function plugin_update($id){
-    	
-		$result_array = $this->plugin_reclamos->get_reclaim($id);		
-		return $this->_html_plugin_update($result_array);
-	}
 	
 	/**
 	 * Función para desplegar listado completo de datos guardados, enviar los títulos en array con clave header y el cuerpo en un array con clave body.

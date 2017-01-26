@@ -37,7 +37,7 @@ class PL_Controller extends MY_Controller {
     private function _plugin_create(){    
         return $this->_html_plugin_create();
     }
-    private function _plugin_update($action_ID){
+    public function _plugin_update($action_ID){
     			
     	//Obtener datos a actualizar
         $data['COLUMN_VAR'] = $action_ID;
