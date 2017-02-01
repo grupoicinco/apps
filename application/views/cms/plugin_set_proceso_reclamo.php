@@ -28,8 +28,9 @@
 								<dd><?=mysql_date_to_dmy($data->RECLAIM_DATE)?></dd>
 								<dt>Producto</dt>
 								<dd><?=$data->RECLAIM_PRODUCT?></dd>
+								<!--
 								<dt>Recibi&oacute;</dt>
-								<dd><?=$data->SALESMAN_NAME.' '.$data->SALESMAN_LASTNAME?>&nbsp;&nbsp;<strong>en</strong>&nbsp;&nbsp;<?=$data->STORE_NAME?></dd>
+								<dd><?=$data->SALESMAN_NAME.' '.$data->SALESMAN_LASTNAME?>&nbsp;&nbsp;<strong>en</strong>&nbsp;&nbsp;<?=$data->STORE_NAME?></dd> -->
 							</dl>
 						</div>
 					</div>

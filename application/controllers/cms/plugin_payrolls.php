@@ -869,8 +869,13 @@ class Plugin_payrolls extends PL_Controller {
 		$aguinaldosave				= array();
 		foreach($payrolls as $i => $payroll){
 			//Planilla del mes
+			$commencementdate 		= new DateTime($payroll->SALESMAN_COMMENCEMENT);
+			$endpayrolldate			= new DateTime($payroll->PAYROLL_ENDDATE);
+			$workperiodinterval		= $commencementdate->diff($endpayrolldate);
+			$daysworked				= $workperiodinterval->format('%R%a');
+			list($endd, $endm, $endy) 		= explode("-", $payroll->PAYROLL_ENDDATE);
 			$payroll->PAYROLL_DAYSWORKED 	= round($payroll->PAYROLL_SALARYPAID / ($payroll->SALESMAN_SALARY/30)); //Obtener dias trabajados.
-			$payroll->PAYROLL_HALFMONTH		= ($payroll->PAYROLL_DAYSWORKED >= 30)?($payroll->SALESMAN_SALARY / 2):0; //Obtener el pago de quincena.
+			$payroll->PAYROLL_HALFMONTH		= ($daysworked >= 30 && $endd > 15)?($payroll->SALESMAN_SALARY / 2):0; //Obtener el pago de quincena.
 			
 			//Bono 14
 			$bono14							= $this->bono14($payroll, ($payroll->PAYROLL_TOTALACCRUED - $payroll->PAYROLL_ESTABLISHEDBONUS));

@@ -520,7 +520,7 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		list($endy, $endm, $endd) = explode("-", $payrolls->PAYROLL_ENDDATE);//Obtener dia mes y año separado de la fecha final
 		list($comy, $comm, $comd) = explode("-", $payrolls->SALESMAN_COMMENCEMENT);//Obtener dia mes y año separado de la fecha final
 		$stringmonth		= date_components(); //Obtener formato en array para nombres de meses. (utilities_helper)
-		
+		$anticipoquincena	= 0; //En caso no se haya pagado quincena por no haber llegado al quince del mes.
 		//Iniciar el PDF
 	 	$pdf = new PDF();
 		$pdf->AddPage();
@@ -567,7 +567,12 @@ Para lo cual el cliente firma en conformidad con esta resolución y declara que r
 		$pdf->Cell($namesize, 5, "Descuento:", 0, 0, "L");
 		$pdf->Cell($amountsize, 5, "Q.".number_format($payrolls->PAYROLL_EXTRADISCOUNT,2,'.',','), 0, 1, "L");
 		endif;
-		$pdf->Cell(0, 5, "Q.".number_format($payrolls->PAYROLL_TOTALACCRUED,2,'.',','), "T", 1, "R");
+		if($endd > 15): //Agregar anticipo quincena
+		$anticipoquincena	= ($payrolls->SALESMAN_SALARY/2)*-1;
+		$pdf->Cell($namesize, 5, "Anticipo Quincena:", 0, 0, "L");
+		$pdf->Cell($amountsize, 5, "Q.".number_format($anticipoquincena,2,'.',','), 0, 1, "L");
+		endif;
+		$pdf->Cell(0, 5, "Q.".number_format($payrolls->PAYROLL_TOTALACCRUED + $anticipoquincena,2,'.',','), "T", 1, "R");
 		//VACACIONES
 		$pdf->SetFont('Arial','B',9);
 		$pdf->Cell(0, 5, "II. VACACIONES:", 0, 1, "L");

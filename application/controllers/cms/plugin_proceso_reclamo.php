@@ -70,7 +70,7 @@ class Plugin_proceso_reclamo extends PL_Controller {
 	}
 	
 	//Función para enviar reclamo con los datos específicos
-    public function _plugin_update($id){
+    public function plugin_update($id){
     	
 		$result_array = $this->plugin_reclamos->get_reclaim($id);
 		return $this->_html_plugin_update($result_array);
